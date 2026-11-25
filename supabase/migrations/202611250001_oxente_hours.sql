@@ -7,6 +7,7 @@ create table if not exists private.opening_hours_backup_20261125 as
 select establishment_id, config, updated_at
 from public.opening_hours
 where establishment_id = '00000000-0000-4000-8000-000000000002'::uuid;
+alter table private.opening_hours_backup_20261125 enable row level security;
 revoke all on table private.opening_hours_backup_20261125 from public, anon, authenticated;
 
 -- O salvamento legado do catálogo ainda envia uma cópia de hours. Impede que essa
