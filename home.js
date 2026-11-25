@@ -39,8 +39,7 @@
     document.title = `${identity.name} — Bem-vindo`;
     document.querySelector('#brandName').textContent = identity.name.toUpperCase();
 
-    const tagline = !identity.tagline || identity.tagline === 'O sabor da Bahia, a cerveja gelada e os melhores encontros!' ? 'Barzinho do jeito que você gosta!' : identity.tagline;
-    document.querySelector('#homeTagline').innerHTML = e(tagline).replace(/você gosta!/i, match => `<em>${match}</em>`);
+    document.querySelector('#homeTagline').innerHTML = 'Barzinho do jeito que <em>você gosta!</em>';
     document.querySelector('#homeIntro').textContent = 'Comida boa, cerveja gelada e muita resenha em um só lugar.';
     const customLogo = identity.logo && identity.logo !== standardLogo ? T.imageUrl(identity.logo) : '';
     const logo = customLogo || 'public/assets/oxente-home-logo-approved.webp';
