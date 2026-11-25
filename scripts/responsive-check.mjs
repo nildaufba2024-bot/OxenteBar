@@ -67,11 +67,11 @@ try {
       await send('Emulation.setDeviceMetricsOverride', { width, height: width === 998 ? 1578 : width === 576 ? 889 : width < 700 ? 780 : 900, deviceScaleFactor: 1, mobile: width < 700 });
       await send('Page.navigate', { url: `http://127.0.0.1:4174${page}` });
       for (let attempt = 0; attempt < 30; attempt++) {
-        const ready = await evaluate(`Boolean(document.querySelector('#menuStatus,#homeStatus')?.textContent) && ${page === '/' ? "!document.querySelector('.service-placeholder')" : "!!document.querySelector('.beer-card')"}`);
+        const ready = await evaluate(`${page === '/' ? "Boolean(document.querySelector('#homeStatus')?.textContent) && !document.querySelector('.service-placeholder')" : "!!document.querySelector('.beer-card')"}`);
         if (ready) break;
         await delay(200);
       }
-      const info = await evaluate(`(() => {const nav=performance.getEntriesByType('navigation')[0];return {ready:document.readyState, viewport:document.documentElement.clientWidth, scrollWidth:document.documentElement.scrollWidth, title:document.title, cards:document.querySelectorAll('.product-card').length, beerCards:document.querySelectorAll('.beer-card').length, images:[...document.querySelectorAll('.beer-card img')].filter(x=>x.complete&&x.naturalWidth>0).length, status:document.querySelector('#menuStatus,#homeStatus')?.textContent, nav:!!document.querySelector('.app-nav-item'), nodes:document.querySelectorAll('*').length, loadMs:Math.round(nav?.loadEventEnd||0), clippedHomeLabels:[...document.querySelectorAll('.service:not(.service--video) .action-copy strong')].filter(el=>{const range=document.createRange();range.selectNodeContents(el);return range.getBoundingClientRect().right>el.closest('.service').getBoundingClientRect().right-6}).length, error:document.querySelector('.loading')?.textContent||''}})()`);
+      const info = await evaluate(`(() => {const nav=performance.getEntriesByType('navigation')[0],bottomNav=document.querySelector('.app-nav'),bottomRect=bottomNav?.getBoundingClientRect(),mainRect=document.querySelector('main')?.getBoundingClientRect();return {ready:document.readyState, viewport:document.documentElement.clientWidth, scrollWidth:document.documentElement.scrollWidth, title:document.title, cards:document.querySelectorAll('.product-card').length, beerCards:document.querySelectorAll('.beer-card').length, images:[...document.querySelectorAll('.beer-card img')].filter(x=>x.complete&&x.naturalWidth>0).length, status:document.querySelector('#menuStatus,#homeStatus')?.textContent, nav:!!document.querySelector('.app-nav-item'), navVisible:bottomNav&&getComputedStyle(bottomNav).display==='flex',contentAboveNav:bottomRect&&mainRect?mainRect.bottom<=bottomRect.top+1:null, nodes:document.querySelectorAll('*').length, loadMs:Math.round(nav?.loadEventEnd||0), clippedHomeLabels:[...document.querySelectorAll('.service:not(.service--video) .action-copy strong')].filter(el=>{const range=document.createRange();range.selectNodeContents(el);return range.getBoundingClientRect().right>el.closest('.service').getBoundingClientRect().right-6}).length, error:document.querySelector('.loading')?.textContent||''}})()`);
       const record = { page, width, ...info, overflow: info.scrollWidth > info.viewport + 1 };
       records.push(record);
       if (capture.has(width)) {
@@ -125,7 +125,7 @@ try {
       opening, closing, videoOpens,
       videoCloses: !document.querySelector('#videoDialog')?.open,
       socialLinksValid: [...document.querySelectorAll('.service:not(.service--video)[href]')].every(a => /^https?:/.test(a.href)),
-      navHidden: getComputedStyle(document.querySelector('.app-nav')).display === 'none'
+      navVisible: getComputedStyle(document.querySelector('.app-nav')).display === 'flex'
     };
   })()`);
   await send('Page.navigate', { url: 'http://127.0.0.1:4174/admin/' });
@@ -157,9 +157,25 @@ try {
   const offlineReload = await evaluate(`(()=>({beerCards:document.querySelectorAll('.beer-card').length,price:document.querySelector('.beer-copy>span')?.textContent,notice:document.querySelector('.offline-notice')?.textContent}))()`);
   await send('Network.emulateNetworkConditions', { offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1 });
   testingOffline = false;
-  const result = { records, productViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
+  const { identifier: standaloneScript } = await send('Page.addScriptToEvaluateOnNewDocument', { source: `Object.defineProperty(navigator, 'standalone', {value:true, configurable:true});` });
+  const standalone = [];
+  for (const page of ['/', '/cardapio/']) {
+    await send('Page.navigate', { url: `http://127.0.0.1:4174${page}` });
+    for (let attempt = 0; attempt < 30; attempt++) {
+      if (await evaluate(`!!document.querySelector('.app-nav-item') && ${page === '/' ? "!!document.querySelector('#homeStatus')?.textContent" : "!!document.querySelector('.beer-card')"}`)) break;
+      await delay(200);
+    }
+    const info = await evaluate(`(()=>{const nav=document.querySelector('.app-nav');const rect=nav?.getBoundingClientRect(),main=document.querySelector('main'),mainRect=main?.getBoundingClientRect();return {page:location.pathname,classApplied:document.body.classList.contains('is-standalone'),navVisible:getComputedStyle(nav).display==='flex',items:nav.querySelectorAll('.app-nav-item').length,navInViewport:rect.top>=0&&rect.bottom<=innerHeight+1,contentAboveNav:mainRect.bottom<=rect.top+1,bottomSpace:parseInt(getComputedStyle(document.body).paddingBottom)||0,menuStatus:!!document.querySelector('#menuStatus')}})()`);
+    standalone.push(info);
+    if (page === '/cardapio/') {
+      const screenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
+      await writeFile(join(output, 'app-cardapio-390.png'), Buffer.from(screenshot.data, 'base64'));
+    }
+  }
+  await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: standaloneScript });
+  const result = { records, productViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
   await writeFile(join(output, 'results.json'), JSON.stringify(result, null, 2));
-  console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));
+  console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));
 } finally {
   ws?.close();
   browser.kill();

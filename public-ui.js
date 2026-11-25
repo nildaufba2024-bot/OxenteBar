@@ -2,6 +2,8 @@
   const T = window.TR;
   if (!T) return;
   const menuPage = location.pathname.startsWith('/cardapio');
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  document.body.classList.toggle('is-standalone', standalone);
   const base = menuPage ? '../' : './';
   const paths = {
     home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-7h6v7"/>',
@@ -82,8 +84,10 @@
     brand.className = 'rail-brand';
     brand.textContent = 'OXENTE · CARDÁPIO';
     rail.prepend(brand);
-    const onScroll = () => document.body.classList.toggle('has-scrolled', window.scrollY > 120);
-    window.addEventListener('scroll', onScroll, {passive: true});
+    const docked = matchMedia('(max-width:700px)').matches;
+    const scroller = docked ? document.querySelector('.menu-shell') : window;
+    const onScroll = () => document.body.classList.toggle('has-scrolled', (docked ? scroller.scrollTop : window.scrollY) > 120);
+    scroller.addEventListener('scroll', onScroll, {passive: true});
     onScroll();
   }
 })();

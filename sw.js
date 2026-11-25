@@ -1,4 +1,4 @@
-const VERSION = 'oxente-visual-37';
+const VERSION = 'oxente-visual-43';
 const STATIC = `${VERSION}-static`;
 const IMAGES = `${VERSION}-images`;
 const SHELL = [
@@ -41,7 +41,7 @@ self.addEventListener('fetch', event => {
     event.respondWith(caches.open(IMAGES).then(async cache => (await cache.match(request)) || fetch(request).then(response => { if (response.ok) cache.put(request, response.clone()); return response; })));
     return;
   }
-  if (url.pathname === '/home.css' || url.pathname === '/home.js') {
+  if (['/home.css', '/home.js', '/cardapio/menu.css', '/cardapio/premium.css', '/app.js', '/public-ui.css', '/public-ui.js'].includes(url.pathname)) {
     event.respondWith(fetch(request).then(response => {
       if (response.ok) caches.open(STATIC).then(cache => cache.put(request, response.clone()));
       return response;

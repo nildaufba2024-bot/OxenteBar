@@ -55,12 +55,8 @@
     T.applyTheme(state);
     const logo=identity.logo==='public/assets/oxente-logo-premium.webp'?'../public/assets/oxente-home-logo-approved.webp':identity.logo?.startsWith('public/')?'../'+identity.logo:T.imageUrl(identity.logo);
     document.querySelector('#menuBrandLogo').src=logo||'../public/assets/oxente-home-logo-approved.webp';
-    const status=T.status(state);
-    const statusEl=document.querySelector('#menuStatus');
-    statusEl.textContent=status.label+(state.hours?.notice&&T.fresh?' · '+state.hours.notice:'');
-    statusEl.classList.toggle('is-open',status.open);
     document.body.classList.toggle('is-offline',!T.fresh);
-    document.title='Cardápio Digital — '+identity.name;
+    document.title='Delícias do Oxente — '+identity.name;
     const cats=state.categories.filter(c=>c.active).sort((a,b)=>a.order-b.order);
     if(active!=='todos'&&!cats.some(c=>c.id===active))active=cats[0]?.id||'todos';
     const counts=new Map(cats.map(c=>[c.id,state.products.filter(p=>p.active!==false&&p.category===c.id).length]));
@@ -167,7 +163,7 @@
   window.addEventListener('tr:datachange',render);
   window.addEventListener('tr:error',()=>{grid.textContent='Não foi possível carregar o cardápio. Tente recarregar a página.'});
   if(T.remote||!T.demo){
-    T.ready.then(render).catch(()=>{grid.innerHTML='<p class="loading">Cardápio indisponível no momento. Conecte-se e tente novamente.</p>';document.querySelector('#menuStatus').textContent='HORÁRIO NÃO ATUALIZADO'});
+    T.ready.then(render).catch(()=>{grid.innerHTML='<p class="loading">Cardápio indisponível no momento. Conecte-se e tente novamente.</p>'});
     if(T.remote)setInterval(()=>{if(!document.hidden)T.refresh().catch(()=>{})},30000);
   }else render();
 })();

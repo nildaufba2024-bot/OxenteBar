@@ -6,6 +6,10 @@ body.home-page{margin:0;min-height:100vh;padding:0;overflow-x:clip;background:#1
 button{font:inherit}
 .home-page a{color:inherit;text-decoration:none}
 .home-page .app-nav{display:none!important}
+body.home-page.is-standalone{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+body.home-page.is-standalone .app-nav{display:flex!important}
+@media(max-width:700px){body.home-page.is-standalone{padding-bottom:0}body.home-page.is-standalone .home-shell{min-height:0;overflow-x:hidden;overflow-y:auto}}
+@media(max-width:700px){body.home-page{height:100dvh;min-height:0;padding-bottom:0;overflow:hidden}body.home-page .home-shell{min-height:0;overflow-x:hidden;overflow-y:auto}body.home-page .app-nav{display:flex!important}}
 .home-shell{--home-scene:url('public/assets/oxente-home-background-approved.webp');width:min(100%,1024px);min-height:100vh;margin:auto;overflow:hidden;container-type:inline-size;isolation:isolate;background-color:#250c02;background-image:var(--home-scene),url('public/assets/oxente-home-wood-approved.webp');background-position:center top,center bottom;background-size:100% auto,100% auto;background-repeat:no-repeat,repeat-y;box-shadow:0 12px 70px #000a}
 .home-hero{--hero-drop:4cqw;position:relative;height:calc(65.6cqw + var(--hero-drop));min-height:calc(233px + var(--hero-drop));text-align:center;z-index:1}
 .home-hero.is-without-schedule{height:calc(61.8cqw + var(--hero-drop));min-height:calc(220px + var(--hero-drop))}
