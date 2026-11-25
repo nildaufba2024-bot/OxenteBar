@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Oxente Bar e Petiscaria — comida baiana, petiscos e cerveja gelada.">
+  <meta name="theme-color" content="#1b0b04">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+  <title>Oxente Bar e Petiscaria — Bem-vindo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="icon" href="public/assets/oxente-logo-oficial.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="public-ui.css?v=home-approved-2">
+  <link rel="stylesheet" href="home.css?v=home-approved-9">
+</head>
+<body class="home-page">
+  <main class="home-shell">
+    <header class="home-hero" aria-label="Apresentação do Oxente Bar e Petiscaria">
+      <img id="brandLogo" class="brand-logo" src="public/assets/oxente-home-logo-approved.webp" alt="Oxente Bar e Petiscaria">
+      <h1 id="homeTagline" class="tagline">O sabor da Bahia, a cerveja gelada e os <em>melhores encontros!</em></h1>
+      <span class="tagline-flourish" aria-hidden="true"></span>
+      <p id="homeIntro" class="hero-intro">Comida boa, cerveja gelada e muita resenha em um só lugar.</p>
+      <div id="homeStatus" class="home-status" aria-live="polite">CONSULTANDO HORÁRIO</div>
+    </header>
+
+    <section class="actions" aria-label="Acessos do Oxente Bar e Petiscaria">
+      <a id="menuLink" class="action action--menu" href="cardapio/" aria-label="Abrir cardápio digital">
+        <span class="action-icon" aria-hidden="true"><svg viewBox="0 0 80 80"><path d="M14 54h52M19 50a21 21 0 0 1 42 0M40 25v-5M34 19h12M12 60h56" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><path d="M25 65h30" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></svg></span>
+        <span class="action-copy"><strong>CARDÁPIO <em>DIGITAL</em></strong><small>Descubra as delícias<br>da nossa casa.</small></span>
+        <span class="action-arrow" aria-hidden="true">›</span>
+      </a>
+      <div id="serviceLinks" class="service-grid" aria-live="polite"><div class="service-placeholder">Carregando opções da casa…</div></div>
+      <p id="homeNotice" class="home-notice" hidden></p>
+    </section>
+
+    <div class="ornament" aria-hidden="true"><span></span><b>★ ★ ★</b><span></span></div>
+    <footer class="home-footer"><strong id="brandName">OXENTE BAR E PETISCARIA</strong><small>AMBIENTE DEMOCRÁTICO <i>•</i> PETISCOS <i>•</i> CERVEJA GELADA</small></footer>
+  </main>
+  <dialog id="videoDialog" class="video-dialog" aria-label="Vídeo de apresentação"><button id="videoClose" type="button" aria-label="Fechar vídeo">×</button><div id="videoHost"></div></dialog>
+  <script defer src="data/menu.js"></script>
+  <script defer src="data/runtime-config.js"></script>
+  <script defer src="public/vendor/supabase.js"></script>
+  <script defer src="data/store.js"></script>
+  <script defer src="home.js?v=home-approved-2"></script>
+  <script defer src="video.js"></script>
+  <script defer src="public-ui.js?v=home-approved-2"></script>
+</body>
+</html>
