@@ -21,6 +21,7 @@ Fuso `America/Bahia`: segunda fechada; terça e quarta 16h–22h; quinta 16h–2
 - `npm run test:admin-hours`: passou. Verificou os sete dias, fuso, feriado fechado, intervalo até meia-noite e exigência de validade futura para ajustes manuais.
 - A leitura inicial do Supabase confirmou a configuração antiga: `America/Sao_Paulo`, abertura às 18h nos dias abertos e fechamento à meia-noite. Após autorização explícita, a migração retornou `Success. No rows returned`. A leitura da RPC `opening_hours_clock` confirmou os sete dias corretos, `America/Bahia`, `manual: auto`, `serverNow` e `updatedAt`.
 - A consulta de proteção retornou `backup_rls = true`, `backup_rows = 1` e `realtime_enabled = true`.
+- A aplicação ocorreu pelo SQL Editor. A migração versionada só substitui a semana legada enquanto o fuso ainda não for `America/Bahia`, evitando restaurar a programação oficial por cima de futuras edições do proprietário caso seja executada novamente.
 - A home local foi recarregada com o servidor ativo. A leitura visual e do DOM confirmou `FECHADO AGORA`, `Abrimos hoje às 16h00`, as duas frases aprovadas e o card sem a chamada “Delícias do Oxente”. A última auditoria completa de viewport anterior à mudança de horários passou em 34 combinações, sem rolagem horizontal e com os quatro botões sociais uniformes. A repetição visual completa após a mudança ainda não foi executada.
 
 ## Pendências antes de publicar o frontend

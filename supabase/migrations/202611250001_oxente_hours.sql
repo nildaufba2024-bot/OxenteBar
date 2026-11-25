@@ -130,5 +130,6 @@ set config = config || pg_catalog.jsonb_build_object(
     pg_catalog.jsonb_build_object('day','Sábado','open',true,'intervals',pg_catalog.jsonb_build_array(pg_catalog.jsonb_build_object('start','12:00','end','00:00')))
   )
 ), updated_at = pg_catalog.clock_timestamp()
-where establishment_id = '00000000-0000-4000-8000-000000000002'::uuid;
+where establishment_id = '00000000-0000-4000-8000-000000000002'::uuid
+  and coalesce(config->>'timezone', '') <> 'America/Bahia';
 commit;
