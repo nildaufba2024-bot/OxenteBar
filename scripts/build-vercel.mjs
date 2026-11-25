@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { access, cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve, sep } from 'node:path';
 
 const root = process.cwd();
@@ -59,6 +59,11 @@ for (const file of files) {
 for (const directory of directories) {
   await mkdir(dirname(join(output, directory)), { recursive: true });
   await cp(join(root, directory), join(output, directory), { recursive: true });
+}
+for (const icon of ['whatsapp', 'instagram', 'location', 'ifood']) {
+  const asset = `public/assets/brands/${icon}.svg`;
+  try { await access(join(output, asset)); }
+  catch { throw new Error(`Ícone obrigatório ausente no build: ${asset}`); }
 }
 await writeFile(join(output, 'data/runtime-config.js'), `window.TR_CONFIG = ${JSON.stringify(config)};\n`);
 console.log(`Build Vercel pronto em dist/ (${files.length} arquivos e ${directories.length} diretórios públicos).`);
