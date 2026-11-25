@@ -11,7 +11,7 @@ Fuso `America/Bahia`: segunda fechada; terça e quarta 16h–22h; quinta 16h–2
 - A home exibe `ABERTO AGORA`, `FECHADO AGORA`, `ABRIMOS EM BREVE` ou `ENCERRANDO EM BREVE`, com cores próprias. Os estados “em breve” usam o limite inclusivo de 30 minutos. A mensagem complementar é calculada a partir do intervalo ou do ajuste ativo.
 - O horário do servidor retornado pela RPC `opening_hours_clock` é a âncora do relógio. O cliente revalida a cada minuto, quando volta ao primeiro plano e quando recebe um evento Supabase Realtime. Se a confirmação expira, falha ou ainda traz a configuração antiga em `America/Sao_Paulo`, mostra “HORÁRIO TEMPORARIAMENTE INDISPONÍVEL”. O cache offline não é usado para afirmar que a casa está aberta.
 - O painel “Horário de Funcionamento” edita a semana, abertura e fechamento manual com validade, feriados e datas especiais. Uma data especial substitui o dia semanal, permitindo extensão ou encerramento antecipado. O painel salva apenas a tabela de horários pela RPC `save_opening_hours`, com verificação de administrador no banco. A migração protege os horários contra sobrescrita pelo salvamento legado do catálogo e cria um ponto de restauração privado da configuração anterior.
-- A frase principal da home é “Barzinho do jeito que você gosta!”, com destaque dourado em “você gosta!”. A frase secundária obrigatória foi mantida. Conforme o pedido mais recente, a chamada “Delícias do Oxente” foi retirada do card; o título “CARDÁPIO DIGITAL” permanece.
+- A frase principal da home é “Barzinho do jeito que você gosta!”, com destaque dourado em “você gosta!”. A frase secundária obrigatória foi mantida. O título do card foi substituído por “Delícias do Oxente”, conforme a correção do cliente; o subtítulo foi removido.
 
 ## Verificações executadas
 
@@ -22,7 +22,7 @@ Fuso `America/Bahia`: segunda fechada; terça e quarta 16h–22h; quinta 16h–2
 - A leitura inicial do Supabase confirmou a configuração antiga: `America/Sao_Paulo`, abertura às 18h nos dias abertos e fechamento à meia-noite. Após autorização explícita, a migração retornou `Success. No rows returned`. A leitura da RPC `opening_hours_clock` confirmou os sete dias corretos, `America/Bahia`, `manual: auto`, `serverNow` e `updatedAt`.
 - A consulta de proteção retornou `backup_rls = true`, `backup_rows = 1` e `realtime_enabled = true`.
 - A aplicação ocorreu pelo SQL Editor. A migração versionada só substitui a semana legada enquanto o fuso ainda não for `America/Bahia`, evitando restaurar a programação oficial por cima de futuras edições do proprietário caso seja executada novamente.
-- A home local foi recarregada com o servidor ativo. A leitura visual e do DOM confirmou `FECHADO AGORA`, `Abrimos hoje às 16h00`, as duas frases aprovadas e o card sem a chamada “Delícias do Oxente”. A última auditoria completa de viewport anterior à mudança de horários passou em 34 combinações, sem rolagem horizontal e com os quatro botões sociais uniformes. A repetição visual completa após a mudança ainda não foi executada.
+- A home local foi recarregada com o servidor ativo. A leitura visual e do DOM confirmou `FECHADO AGORA`, `Abrimos hoje às 16h00`, as duas frases aprovadas e “Delícias do Oxente” como título do card, sem subtítulo. A última auditoria completa de viewport anterior à mudança de horários passou em 34 combinações, sem rolagem horizontal e com os quatro botões sociais uniformes. A repetição visual completa após a mudança ainda não foi executada.
 
 ## Pendências antes de publicar o frontend
 
