@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 const chrome = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+const siteOrigin = process.env.OXENTE_TEST_ORIGIN || 'http://127.0.0.1:4174';
 const profile = await mkdtemp(join(tmpdir(), 'oxente-check-'));
 const output = join(process.cwd(), 'tmp', 'responsive');
 await mkdir(output, { recursive: true });
@@ -33,10 +34,10 @@ try {
     const message = JSON.parse(event.data);
     if (message.method === 'Runtime.exceptionThrown') pageErrors.push(message.params.exceptionDetails?.text || 'Erro JavaScript');
     if (message.method === 'Network.requestWillBeSent') requestUrls.set(message.params.requestId, message.params.request?.url || '');
-    if (message.method === 'Network.loadingFailed' && !testingOffline && !/ERR_ABORTED/.test(message.params.errorText || '') && requestUrls.get(message.params.requestId)?.startsWith('http://127.0.0.1:4174/')) failedLocalRequests.push(`${message.params.errorText} ${new URL(requestUrls.get(message.params.requestId)).pathname}`);
+    if (message.method === 'Network.loadingFailed' && !testingOffline && !/ERR_ABORTED/.test(message.params.errorText || '') && requestUrls.get(message.params.requestId)?.startsWith(`${siteOrigin}/`)) failedLocalRequests.push(`${message.params.errorText} ${new URL(requestUrls.get(message.params.requestId)).pathname}`);
     if (message.method === 'Network.responseReceived') {
       const response = message.params.response;
-      if (response?.status >= 400 && response.url?.startsWith('http://127.0.0.1:4174/')) badLocalResponses.push(`${response.status} ${new URL(response.url).pathname}`);
+      if (response?.status >= 400 && response.url?.startsWith(`${siteOrigin}/`)) badLocalResponses.push(`${response.status} ${new URL(response.url).pathname}`);
     }
     if (!message.id || !pending.has(message.id)) return;
     const { resolve, reject } = pending.get(message.id);
@@ -65,7 +66,7 @@ try {
   for (const page of ['/', '/cardapio/']) {
     for (const width of widths) {
       await send('Emulation.setDeviceMetricsOverride', { width, height: width === 998 ? 1578 : width === 576 ? 889 : width === 360 ? 670 : width < 700 ? 780 : 900, deviceScaleFactor: 1, mobile: width < 700 });
-      await send('Page.navigate', { url: `http://127.0.0.1:4174${page}` });
+      await send('Page.navigate', { url: `${siteOrigin}${page}` });
       for (let attempt = 0; attempt < 30; attempt++) {
         const ready = await evaluate(`${page === '/' ? "Boolean(document.querySelector('#homeStatus')?.textContent) && !document.querySelector('.service-placeholder')" : "!!document.querySelector('.beer-card')"}`);
         if (ready) break;
@@ -90,7 +91,7 @@ try {
     }
   }
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 780, deviceScaleFactor: 1, mobile: true });
-  await send('Page.navigate', { url: 'http://127.0.0.1:4174/' });
+  await send('Page.navigate', { url: `${siteOrigin}/` });
   for (let attempt = 0; attempt < 30; attempt++) {
     if (await evaluate(`!document.querySelector('.service-placeholder') && !!document.querySelector('.service--video')`)) break;
     await delay(200);
@@ -128,13 +129,13 @@ try {
       navVisible: getComputedStyle(document.querySelector('.app-nav')).display === 'flex'
     };
   })()`);
-  await send('Page.navigate', { url: 'http://127.0.0.1:4174/admin/' });
+  await send('Page.navigate', { url: `${siteOrigin}/admin/` });
   await delay(600);
   const admin = await evaluate(`(() => ({title:document.title,loginVisible:!!document.querySelector('#login')&&!document.querySelector('#login').hidden,authFormVisible:!!document.querySelector('#authForm')&&!document.querySelector('#authForm').hidden,shellHidden:document.querySelector('#shell')?.hidden}))()`);
   const landscape = [];
   for (const [width, height] of [[667, 375], [844, 390]]) {
     await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: true });
-    await send('Page.navigate', { url: 'http://127.0.0.1:4174/cardapio/' });
+    await send('Page.navigate', { url: `${siteOrigin}/cardapio/` });
     for (let attempt = 0; attempt < 25; attempt++) {
       if (await evaluate(`!!document.querySelector('.beer-card')`)) break;
       await delay(200);
@@ -143,7 +144,7 @@ try {
     landscape.push({ width, height, ...info, overflow: info.scrollWidth > info.viewport + 1, dialogFits: info.dialogHeight <= info.visualHeight + 1 });
   }
   await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 780, deviceScaleFactor: 1, mobile: true });
-  await send('Page.navigate', { url: 'http://127.0.0.1:4174/cardapio/' });
+  await send('Page.navigate', { url: `${siteOrigin}/cardapio/` });
   await delay(1600);
   const pwa = await evaluate(`(async()=>{const manifest=await fetch('/manifest.webmanifest');const sw=await Promise.race([navigator.serviceWorker.ready,new Promise(r=>setTimeout(()=>r(null),3000))]);return {manifest:manifest.status,worker:sw?.active?.state||null,controller:!!navigator.serviceWorker.controller,cacheKeys:await caches.keys()}})()`);
   const interaction = await evaluate(`(async()=>{const beerCount=document.querySelectorAll('.beer-card').length;const beerNames=[...document.querySelectorAll('.beer-copy strong')].map(x=>x.textContent);document.querySelector('.beer-card')?.click();const beerModal=document.querySelector('#productDialog')?.open;document.querySelector('#closeDialog')?.click();document.querySelector('.beer-all')?.click();const beerSelected=document.querySelector('.category.is-active')?.dataset.category;document.querySelector('.feature-expand').click();const featuredCount=document.querySelectorAll('.feature-card').length;const featuredVisible=[...document.querySelectorAll('.feature-card')].filter(x=>getComputedStyle(x).display!=='none').length;const featuredImages=[...document.querySelectorAll('.feature-card img')];featuredImages.forEach(img=>img.loading='eager');await Promise.race([Promise.all(featuredImages.map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,5000))]);const brokenFeatured=featuredImages.filter(img=>!img.naturalWidth).length;document.querySelector('[data-feature-category="do-mar"]').click();const gallerySelected=document.querySelector('.category.is-active')?.dataset.category;const category=document.querySelector('[data-category="bolinhos"]');category.click();await new Promise(r=>setTimeout(r,400));const selected=document.querySelector('.category.is-active')?.dataset.category;const image=document.querySelector('.product-card img')?.currentSrc;document.querySelector('.product-open')?.click();const modal=document.querySelector('#productDialog')?.open;document.querySelector('#closeDialog')?.click();const closed=!document.querySelector('#productDialog')?.open;const input=document.querySelector('#searchInput');input.value='camarão';input.dispatchEvent(new Event('input',{bubbles:true}));const searchResults=document.querySelectorAll('.product-card').length;document.querySelector('#clearSearch').click();document.querySelector('#moreButton').click();const moreOpen=document.querySelector('.more-dialog').open;document.querySelector('.more-close').click();const externalLinks=[...document.querySelectorAll('a[target="_blank"]')].every(a=>/^https?:/.test(a.href));return {beerCount,beerNames,beerModal,beerSelected,featuredCount,featuredVisible,brokenFeatured,gallerySelected,selected,image:image?.split('/').pop(),modal,closed,searchResults,moreOpen,externalLinks,missingAlt:document.querySelectorAll('img:not([alt])').length}})()`);
@@ -160,7 +161,7 @@ try {
   const { identifier: standaloneScript } = await send('Page.addScriptToEvaluateOnNewDocument', { source: `Object.defineProperty(navigator, 'standalone', {value:true, configurable:true});` });
   const standalone = [];
   for (const page of ['/', '/cardapio/']) {
-    await send('Page.navigate', { url: `http://127.0.0.1:4174${page}` });
+    await send('Page.navigate', { url: `${siteOrigin}${page}` });
     for (let attempt = 0; attempt < 30; attempt++) {
       if (await evaluate(`!!document.querySelector('.app-nav-item') && ${page === '/' ? "!!document.querySelector('#homeStatus')?.textContent" : "!!document.querySelector('.beer-card')"}`)) break;
       await delay(200);

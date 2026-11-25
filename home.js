@@ -45,7 +45,7 @@
     document.querySelector('#homeTagline').innerHTML = '<span>Barzinho do jeito que</span> <em>você gosta!</em>';
     document.querySelector('#homeIntro').textContent = 'Comida boa, cerveja gelada e muita resenha em um só lugar.';
     const customLogo = identity.logo && identity.logo !== standardLogo ? T.imageUrl(identity.logo) : '';
-    const logo = customLogo || 'public/assets/oxente-home-logo-approved.webp';
+    const logo = customLogo || 'public/assets/oxente-logo-cliente.png';
     if (document.querySelector('#brandLogo').getAttribute('src') !== logo) document.querySelector('#brandLogo').src = logo;
     const customBanner = identity.banner && identity.banner !== standardBanner ? T.imageUrl(identity.banner) : '';
     if (customBanner) document.querySelector('.home-shell').style.setProperty('--home-scene', `url("${customBanner}")`);
