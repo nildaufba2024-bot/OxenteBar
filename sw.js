@@ -1,4 +1,4 @@
-const VERSION = 'oxente-visual-29';
+const VERSION = 'oxente-visual-32';
 const STATIC = `${VERSION}-static`;
 const IMAGES = `${VERSION}-images`;
 const SHELL = [
@@ -39,6 +39,13 @@ self.addEventListener('fetch', event => {
   }
   if (url.pathname.startsWith('/public/assets/products/')) {
     event.respondWith(caches.open(IMAGES).then(async cache => (await cache.match(request)) || fetch(request).then(response => { if (response.ok) cache.put(request, response.clone()); return response; })));
+    return;
+  }
+  if (url.pathname === '/home.css' || url.pathname === '/home.js') {
+    event.respondWith(fetch(request).then(response => {
+      if (response.ok) caches.open(STATIC).then(cache => cache.put(request, response.clone()));
+      return response;
+    }).catch(async () => (await caches.match(request)) || (await caches.match(url.pathname))));
     return;
   }
   if (SHELL.includes(url.pathname) || url.pathname.startsWith('/public/icons/')) {

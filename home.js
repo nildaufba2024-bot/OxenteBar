@@ -32,14 +32,17 @@
     statusEl.dataset.tone = status.tone;
     const scheduleEl = document.querySelector('#homeSchedule');
     const hint = status.hint;
-    scheduleEl.querySelector('span').textContent = hint;
+    const timeMatch = /(\b\d{1,2}h\d{2}|meia-noite)$/i.exec(hint);
+    scheduleEl.querySelector('.schedule-copy').innerHTML = timeMatch
+      ? `${e(hint.slice(0, timeMatch.index))}<strong class="schedule-time">${e(timeMatch[0])}</strong>`
+      : e(hint);
     scheduleEl.hidden = !hint;
     document.querySelector('.home-hero').classList.toggle('is-without-schedule', !hint);
     document.querySelector('.home-hero').classList.toggle('is-long-schedule', hint.length > 40);
     document.title = `${identity.name} — Bem-vindo`;
     document.querySelector('#brandName').textContent = identity.name.toUpperCase();
 
-    document.querySelector('#homeTagline').innerHTML = 'Barzinho do jeito que <em>você gosta!</em>';
+    document.querySelector('#homeTagline').innerHTML = '<span>Barzinho do jeito que</span> <em>você gosta!</em>';
     document.querySelector('#homeIntro').textContent = 'Comida boa, cerveja gelada e muita resenha em um só lugar.';
     const customLogo = identity.logo && identity.logo !== standardLogo ? T.imageUrl(identity.logo) : '';
     const logo = customLogo || 'public/assets/oxente-home-logo-approved.webp';
