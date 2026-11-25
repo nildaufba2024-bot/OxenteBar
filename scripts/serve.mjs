@@ -5,12 +5,12 @@ import { resolve, extname, sep } from 'node:path';
 const root=process.cwd(), port=Number(process.env.PORT||4174);
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.mp4':'video/mp4','.webmanifest':'application/manifest+json'};
 const allowed=new Set([
-'/index.html','/home.css','/home.js','/video.js','/cardapio/index.html','/cardapio/menu.css','/cardapio/premium.css','/styles.css','/app.js','/public-ui.js','/public-ui.css','/manifest.webmanifest','/sw.js','/offline.html',
+'/index.html','/home.css','/home.js','/video.js','/cardapio/index.html','/cardapio/menu.css','/cardapio/premium.css','/cardapio/reference-fix.css','/styles.css','/app.js','/public-ui.js','/public-ui.css','/manifest.webmanifest','/sw.js','/offline.html',
 '/admin/index.html','/admin/admin.css','/admin/auth.css','/admin/hours-panel.css','/admin/admin.js','/admin/hours-panel.js','/admin/vendor/qrcode.js',
 '/data/menu.js','/data/store.js','/data/hours.js','/data/runtime-config.js','/data/oxente-photos.js','/public/vendor/supabase.js',
 '/public/assets/oxente-logo-oficial.jpg','/public/assets/oxente-hero.jpg','/public/assets/oxente-cardapio.jpg',
 '/public/assets/oxente-video-capa.jpg','/public/assets/oxente-video-thumb.jpg','/public/assets/oxente-apresentacao.mp4',
-'/public/assets/oxente-logo-premium.webp','/public/assets/oxente-hero-premium.webp',
+'/public/assets/oxente-logo-premium.webp','/public/assets/oxente-hero-premium.webp','/public/assets/oxente-cardapio-background-v2.png',
 '/public/assets/oxente-menu-premium.webp','/public/assets/oxente-video-premium.webp',
 '/public/assets/oxente-menu-wood-demo.webp','/public/assets/oxente-wallpaper-mobile.webp','/public/assets/oxente-wallpaper-desktop.webp','/public/assets/oxente-logo-reference.webp',
 '/public/assets/oxente-home-logo-approved.webp','/public/assets/oxente-logo-cliente.png','/public/assets/oxente-home-background-approved.webp','/public/assets/oxente-home-wood-approved.webp',

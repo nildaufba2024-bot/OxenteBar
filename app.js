@@ -77,9 +77,9 @@
       return '<button type="button" class="feature-card" data-feature-category="'+e(c.id)+'" aria-label="Ver categoria '+e(c.label)+'"><img src="'+e(image.url)+'"'+responsive(image.url)+' alt="'+(image.illustrative?'Imagem ilustrativa':'Fotografia')+' da categoria '+e(c.label)+'" loading="lazy" decoding="async" width="640" height="480"><span class="feature-shade"></span><strong>'+e(c.label)+'</strong><span class="feature-go" aria-hidden="true">›</span>'+(image.illustrative?'<small>Imagem ilustrativa</small>':'')+'</button>';
     }).join('')+'</div>';
     const beers=state.products.filter(p=>p.active!==false&&p.category==='cervejas');
-    const beerNames=['heineken long','heineken 600ml','stella 600ml'];
+    const beerNames=['heineken long','stella 600ml','amstel 600ml','brahma 600ml'];
     const highlighted=beerNames.map(name=>beers.find(p=>norm(p.name)===name)).filter(Boolean);
-    for(const p of beers){if(highlighted.length>=3)break;if(!highlighted.includes(p))highlighted.push(p)}
+    for(const p of beers){if(highlighted.length>=4)break;if(!highlighted.includes(p))highlighted.push(p)}
     beerSpotlight.hidden=!landing||!highlighted.length||!!query;
     beerSpotlight.innerHTML='<div class="beer-heading"><div>'+icon('cervejas')+'<h2>Cervejas</h2></div><button type="button" class="beer-all">Ver todas <span aria-hidden="true">›</span></button></div><div class="beer-grid">'+highlighted.map(p=>{
       const image=photo(p),name=e(p.name);

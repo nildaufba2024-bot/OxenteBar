@@ -1,0 +1,93 @@
+/* Acabamento da página do cardápio inspirado na referência enviada pelo cliente.
+   Os textos, cartões e ações continuam elementos independentes e acessíveis. */
+body.menu-page{
+  background:#190904 url('../public/assets/oxente-home-wood-approved.webp') center top/cover repeat-y;
+}
+body.menu-page::before{
+  background:linear-gradient(180deg,#14070316 0%,#16070248 34%,#150601d4 100%),url('../public/assets/oxente-home-background-approved.webp') center top/cover no-repeat;
+}
+.menu-page .menu-back{
+  position:absolute;top:14px;left:clamp(16px,3vw,42px);right:auto;z-index:4;
+  display:grid;place-items:center;width:52px;height:52px;min-height:52px;
+  padding:0;border:2px solid #ffc237;border-radius:50%;
+  background:#210b04d9;box-shadow:0 4px 14px #000a,0 0 12px #ff9b2940;
+  font-size:0;
+}
+.menu-page .menu-back::before{content:'←';font:700 36px/1 Arial,sans-serif;color:white}
+.menu-page .menu-header{padding:0 0 15px}
+.menu-page .menu-logo-large{width:clamp(245px,27vw,390px);max-height:none;margin:0 auto -10px;filter:drop-shadow(0 7px 12px #000b) drop-shadow(0 0 11px #e7802644)}
+.menu-page .menu-title-plaque{width:min(94%,780px);min-height:150px;border-radius:35% / 48%;border-color:#ffbd2e;background:linear-gradient(125deg,#1a0804ed,#4c2009da 48%,#1b0805f2),url('../public/assets/oxente-home-wood-approved.webp') center/cover;box-shadow:inset 0 0 0 3px #5e250b,inset 0 0 0 5px #ffce5ea0,0 8px 22px #000b,0 0 15px #eb8a24a3}
+.menu-page .menu-title-plaque h1 span{font-family:'Lobster','Playfair Display',Georgia,serif}
+.menu-page .menu-title-plaque h1 strong{font-family:Georgia,'Playfair Display',serif}
+.menu-page .search-row{width:min(100%,920px);margin-top:18px}
+.menu-page .search-box{height:64px;border:2px solid #ffc441;border-radius:40px;background:#210b05ee;box-shadow:inset 0 1px 9px #000a,0 6px 18px #0009,0 0 9px #ed9a2960}
+.menu-page .search-box input{font-size:clamp(17px,2vw,25px)}
+.menu-page .category-rail{margin:8px -4px 18px;padding:7px 4px 9px;background:#1b0904db;border-bottom-color:#ad672d6e}
+.menu-page .category{height:56px;padding-inline:15px;border:2px solid #e3a128;border-radius:29px;background:#190802ee;box-shadow:0 4px 9px #0008}
+.menu-page .category.is-active{background:linear-gradient(130deg,#ffdb5b,#ffba19);color:#1c0a03}
+.menu-page .category svg{width:24px;height:24px}
+.menu-page .category span{font-size:15px;font-weight:700}
+.menu-page .feature-heading,.menu-page .beer-heading{margin-bottom:11px}
+.menu-page .feature-heading h2,.menu-page .beer-heading h2{font-weight:800;letter-spacing:-.04em}
+.menu-page .feature-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.menu-page .feature-card{aspect-ratio:2.05;border:2px solid #f5b333;border-radius:22px;box-shadow:0 8px 18px #000b,inset 0 0 0 1px #ffe17b5c}
+.menu-page .feature-card img{object-fit:cover}
+.menu-page .feature-shade{height:40%;border-radius:0;background:linear-gradient(transparent,#160500e8 68%,#150500f7)}
+.menu-page .feature-card strong{bottom:12px;font-size:clamp(24px,2.7vw,34px)}
+.menu-page .feature-go{width:40px;height:40px;right:10px;bottom:9px;font-size:33px}
+.menu-page .feature-card small,.menu-page .beer-card small{font-size:10px}
+.menu-page .beer-spotlight{margin:20px 0 34px}
+.menu-page .beer-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.menu-page .beer-card{aspect-ratio:.82;border:2px solid #f3b434;border-radius:20px;background:#1b0803;box-shadow:0 7px 18px #0009,inset 0 0 0 1px #ffe18061}
+.menu-page .beer-photo{inset:0}
+.menu-page .beer-photo img{object-fit:cover;object-position:center}
+.menu-page .beer-photo .beer-ambient{display:none}
+.menu-page .beer-photo .beer-bottle{width:100%;height:100%;mask-image:none}
+.menu-page .beer-card::after{background:linear-gradient(180deg,transparent 45%,#15050050 67%,#140500ed 100%)}
+.menu-page .beer-copy{top:auto;bottom:0;left:0;right:0;gap:2px;align-items:center;padding:8px 6px 7px;text-align:center}
+.menu-page .beer-copy strong{font-size:clamp(16px,1.9vw,25px);line-height:1.05}
+.menu-page .beer-copy>span{padding:3px 8px;border-radius:10px;font-size:clamp(11px,1.2vw,16px)}
+@media(max-width:700px){
+  body.menu-page::before{background:linear-gradient(180deg,#14070305 0%,#1607021a 32%,#140500a8 100%),url('../public/assets/oxente-cardapio-background-v2.png') center top/100% auto no-repeat,url('../public/assets/oxente-home-wood-approved.webp') center/cover repeat-y}
+  .menu-page .menu-shell{padding-inline:12px}
+  .menu-page .menu-back{display:grid;top:7px;left:9px;width:36px;height:36px;min-height:36px;border-width:1.5px}
+  .menu-page .menu-back::before{font-size:26px}
+  .menu-page .menu-header{padding:0}
+  .menu-page .menu-header::before,.menu-page .menu-header::after{display:none}
+  .menu-page .menu-logo-large{width:clamp(190px,51vw,250px);max-height:none;margin:0 auto 0}
+  .menu-page .menu-title-plaque{width:min(94%,440px);min-height:122px;padding:13px 30px 12px;border-radius:33% / 45%}
+  .menu-page .menu-title-crest{top:-18px;width:43px;height:33px}
+  .menu-page .menu-title-plaque h1 span{font-size:clamp(33px,8.5vw,50px)}
+  .menu-page .menu-title-plaque h1 strong{font-size:clamp(49px,13.5vw,75px)}
+  .menu-page .menu-title-leaf{width:18px;height:42px}
+  .menu-page .menu-title-leaf--left{left:12px}.menu-page .menu-title-leaf--right{right:12px}
+  .menu-page .search-row{margin-top:2px}
+  .menu-page .search-box{height:42px;padding-inline:13px}
+  .menu-page .search-box input{font-size:17px}
+  .menu-page .category-rail{margin:0 -12px 0;padding:2px 12px 4px}
+  .menu-page .categories{gap:5px}
+  .menu-page .category{height:37px;gap:4px;padding:3px 9px;border-width:1.5px}
+  .menu-page .category svg{width:17px;height:17px}.menu-page .category span{font-size:11px}
+  .menu-page .feature-heading{margin-top:0;margin-bottom:-5px}
+  .menu-page .feature-heading h2{font-size:clamp(17px,4.8vw,23px)}
+  .menu-page .feature-grid{gap:6px}
+  .menu-page .feature-card{aspect-ratio:2.25;border-radius:12px;border-width:1.5px}
+  .menu-page .feature-card strong{left:7px;right:26px;bottom:6px;font-size:clamp(14px,4vw,20px)}
+  .menu-page .feature-go{right:6px;bottom:5px;width:23px;height:23px;font-size:19px}
+  .menu-page .feature-card small,.menu-page .beer-card small{font-size:7px}
+  .menu-page .beer-spotlight{margin:5px 0 18px}
+  .menu-page .beer-heading{margin-bottom:7px}
+  .menu-page .beer-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .menu-page .beer-card{aspect-ratio:.75;border-radius:12px;border-width:1.5px}
+  .menu-page .beer-copy{top:auto;left:0;right:0;bottom:0;gap:1px;padding:3px 1px}
+  .menu-page .beer-copy strong{font-size:clamp(10px,2.7vw,15px);overflow-wrap:anywhere}
+  .menu-page .beer-copy>span{font-size:clamp(8px,2vw,11px);padding:2px 3px;border-radius:5px}
+  .menu-page .beer-card small{top:3px;left:3px;padding:2px}
+}
+@media(max-width:360px){
+  .menu-page .menu-logo-large{width:190px}
+  .menu-page .menu-title-plaque{width:94%;min-height:112px;padding-inline:18px}
+  .menu-page .menu-title-plaque h1 span{font-size:29px}
+  .menu-page .menu-title-plaque h1 strong{font-size:44px}
+  .menu-page .beer-copy strong{font-size:9px}
+}
