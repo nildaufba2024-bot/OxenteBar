@@ -3,5 +3,7 @@
 !.env.example
 node_modules/
 tmp/
+dist/
+.vercel/
 *.log
 .DS_Store

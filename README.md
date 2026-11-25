@@ -10,6 +10,10 @@ Cardápio digital responsivo e PWA do Oxente Bar e Petiscaria.
 
 O servidor gera `data/runtime-config.js` a partir dessas variáveis. Esse arquivo contém somente a configuração pública necessária ao navegador. A chave de serviço do Supabase e credenciais administrativas não devem ser adicionadas ao repositório.
 
+## Vercel
+
+Importe este repositório na Vercel com a raiz `.` e o preset **Other**. `vercel.json` executa `npm run build:vercel`, publica somente `dist/` e mantém `/cardapio/` e `/admin/` funcionais. A configuração pública atual do Supabase já está versionada; para usar outro projeto, defina juntas `SUPABASE_URL`, `SUPABASE_ANON_KEY` e `ESTABLISHMENT_ID` nas variáveis do projeto Vercel. Consulte [VERCEL.md](VERCEL.md) para os passos de importação e verificação.
+
 ## Verificação
 
 - `npm run check` — sintaxe dos módulos JavaScript.
