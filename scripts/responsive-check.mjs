@@ -59,12 +59,12 @@ try {
   await send('Runtime.enable');
   await send('Network.enable');
   const widths = [320, 360, 375, 390, 393, 412, 414, 430, 480, 576, 600, 768, 998, 1024, 1280, 1440, 1920];
-  const capture = new Set([320, 390, 576, 768, 998, 1280, 1440, 1920]);
+  const capture = new Set([320, 360, 390, 576, 768, 998, 1280, 1440, 1920]);
   const records = [];
   const productViews = [];
   for (const page of ['/', '/cardapio/']) {
     for (const width of widths) {
-      await send('Emulation.setDeviceMetricsOverride', { width, height: width === 998 ? 1578 : width === 576 ? 889 : width < 700 ? 780 : 900, deviceScaleFactor: 1, mobile: width < 700 });
+      await send('Emulation.setDeviceMetricsOverride', { width, height: width === 998 ? 1578 : width === 576 ? 889 : width === 360 ? 670 : width < 700 ? 780 : 900, deviceScaleFactor: 1, mobile: width < 700 });
       await send('Page.navigate', { url: `http://127.0.0.1:4174${page}` });
       for (let attempt = 0; attempt < 30; attempt++) {
         const ready = await evaluate(`${page === '/' ? "Boolean(document.querySelector('#homeStatus')?.textContent) && !document.querySelector('.service-placeholder')" : "!!document.querySelector('.beer-card')"}`);
