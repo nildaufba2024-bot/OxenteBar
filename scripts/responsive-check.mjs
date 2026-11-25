@@ -58,20 +58,20 @@ try {
   await send('Page.enable');
   await send('Runtime.enable');
   await send('Network.enable');
-  const widths = [320, 360, 375, 390, 393, 412, 414, 430, 480, 576, 600, 768, 1024, 1280, 1440, 1920];
-  const capture = new Set([320, 390, 576, 768, 1280, 1440, 1920]);
+  const widths = [320, 360, 375, 390, 393, 412, 414, 430, 480, 576, 600, 768, 998, 1024, 1280, 1440, 1920];
+  const capture = new Set([320, 390, 576, 768, 998, 1280, 1440, 1920]);
   const records = [];
   const productViews = [];
   for (const page of ['/', '/cardapio/']) {
     for (const width of widths) {
-      await send('Emulation.setDeviceMetricsOverride', { width, height: width === 576 ? 889 : width < 700 ? 780 : 900, deviceScaleFactor: 1, mobile: width < 700 });
+      await send('Emulation.setDeviceMetricsOverride', { width, height: width === 998 ? 1578 : width === 576 ? 889 : width < 700 ? 780 : 900, deviceScaleFactor: 1, mobile: width < 700 });
       await send('Page.navigate', { url: `http://127.0.0.1:4174${page}` });
       for (let attempt = 0; attempt < 30; attempt++) {
         const ready = await evaluate(`Boolean(document.querySelector('#menuStatus,#homeStatus')?.textContent) && ${page === '/' ? "!document.querySelector('.service-placeholder')" : "!!document.querySelector('.beer-card')"}`);
         if (ready) break;
         await delay(200);
       }
-      const info = await evaluate(`(() => {const nav=performance.getEntriesByType('navigation')[0];return {ready:document.readyState, viewport:document.documentElement.clientWidth, scrollWidth:document.documentElement.scrollWidth, title:document.title, cards:document.querySelectorAll('.product-card').length, beerCards:document.querySelectorAll('.beer-card').length, images:[...document.querySelectorAll('.beer-card img')].filter(x=>x.complete&&x.naturalWidth>0).length, status:document.querySelector('#menuStatus,#homeStatus')?.textContent, nav:!!document.querySelector('.app-nav-item'), nodes:document.querySelectorAll('*').length, loadMs:Math.round(nav?.loadEventEnd||0), error:document.querySelector('.loading')?.textContent||''}})()`);
+      const info = await evaluate(`(() => {const nav=performance.getEntriesByType('navigation')[0];return {ready:document.readyState, viewport:document.documentElement.clientWidth, scrollWidth:document.documentElement.scrollWidth, title:document.title, cards:document.querySelectorAll('.product-card').length, beerCards:document.querySelectorAll('.beer-card').length, images:[...document.querySelectorAll('.beer-card img')].filter(x=>x.complete&&x.naturalWidth>0).length, status:document.querySelector('#menuStatus,#homeStatus')?.textContent, nav:!!document.querySelector('.app-nav-item'), nodes:document.querySelectorAll('*').length, loadMs:Math.round(nav?.loadEventEnd||0), clippedHomeLabels:[...document.querySelectorAll('.service:not(.service--video) .action-copy strong')].filter(el=>{const range=document.createRange();range.selectNodeContents(el);return range.getBoundingClientRect().right>el.closest('.service').getBoundingClientRect().right-6}).length, error:document.querySelector('.loading')?.textContent||''}})()`);
       const record = { page, width, ...info, overflow: info.scrollWidth > info.viewport + 1 };
       records.push(record);
       if (capture.has(width)) {
@@ -95,11 +95,14 @@ try {
     if (await evaluate(`!document.querySelector('.service-placeholder') && !!document.querySelector('.service--video')`)) break;
     await delay(200);
   }
+  await evaluate(`(async()=>{await Promise.all([...document.querySelectorAll('.service:not(.service--video) img')].map(img=>img.decode().catch(()=>{})));return true})()`);
   const home = await evaluate(`(() => {
     const state = TR.get();
     const opening = TR.status({...state, hours:{...state.hours, manual:'open'}}).label;
     const closing = TR.status({...state, hours:{...state.hours, manual:'closed'}}).label;
     const serviceNames = [...document.querySelectorAll('.service .action-copy strong')].map(el => el.textContent);
+    const socialButtons = [...document.querySelectorAll('.service:not(.service--video)')];
+    const socialMetrics = socialButtons.map(button => { const box=button.getBoundingClientRect(),icon=button.querySelector('img')?.getBoundingClientRect(),divider=button.querySelector('.action-copy')?.getBoundingClientRect();return {width:Math.round(box.width),height:Math.round(box.height),iconWidth:Math.round(icon?.width||0),iconHeight:Math.round(icon?.height||0),dividerOffset:Math.round((divider?.left||0)-box.left)}; });
     const video = document.querySelector('.service--video');
     video?.click();
     const videoOpens = document.querySelector('#videoDialog')?.open;
@@ -113,6 +116,10 @@ try {
       configuredProductPhotos: state.products.filter(p => p.imageUrl && p.imageUrl !== 'photo:none').length,
       configuredDescriptions: state.products.filter(p => p.shortDescription || p.description || p.fullDescription).length,
       serviceNames,
+      schedule: document.querySelector('#homeSchedule')?.hidden ? '' : document.querySelector('#homeSchedule span')?.textContent,
+      brandIconsLoaded: socialButtons.every(button => {const image=button.querySelector('img');return image?.complete&&image.naturalWidth>0}),
+      socialMetrics,
+      socialUniform: socialMetrics.length===4 && socialMetrics.every(metric => metric.height===socialMetrics[0].height && metric.iconWidth===socialMetrics[0].iconWidth && metric.iconHeight===socialMetrics[0].iconHeight && metric.dividerOffset===socialMetrics[0].dividerOffset) && socialMetrics[0].width===socialMetrics[2].width && socialMetrics[1].width===socialMetrics[3].width,
       menuTarget: new URL(document.querySelector('#menuLink').href).pathname,
       status: document.querySelector('#homeStatus')?.textContent,
       opening, closing, videoOpens,

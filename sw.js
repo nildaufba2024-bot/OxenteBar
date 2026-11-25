@@ -1,10 +1,10 @@
-const VERSION = 'oxente-visual-21';
+const VERSION = 'oxente-visual-26';
 const STATIC = `${VERSION}-static`;
 const IMAGES = `${VERSION}-images`;
 const SHELL = [
   '/', '/index.html', '/cardapio/', '/cardapio/index.html', '/offline.html',
   '/home.css', '/home.js', '/video.js', '/cardapio/menu.css', '/cardapio/premium.css', '/app.js',
-  '/public-ui.css', '/public-ui.js', '/data/menu.js', '/data/store.js',
+  '/public-ui.css', '/public-ui.js', '/data/menu.js', '/data/hours.js', '/data/store.js',
   '/data/runtime-config.js', '/data/oxente-photos.js', '/public/vendor/supabase.js',
   '/public/assets/oxente-logo-oficial.jpg', '/public/assets/oxente-logo-premium.webp',
   '/public/assets/oxente-hero-premium.webp', '/public/assets/oxente-menu-premium.webp',
@@ -12,6 +12,7 @@ const SHELL = [
   '/public/assets/oxente-logo-reference.webp',
   '/public/assets/oxente-home-logo-approved.webp', '/public/assets/oxente-home-background-approved.webp', '/public/assets/oxente-home-wood-approved.webp',
   '/public/assets/oxente-home-menu-reference-v2.webp', '/public/assets/oxente-home-video-reference-v2.webp', '/public/assets/oxente-home-rope-reference-v2.webp',
+  '/public/assets/brands/whatsapp.svg', '/public/assets/brands/instagram.svg', '/public/assets/brands/location.svg', '/public/assets/brands/ifood.svg',
   '/public/assets/oxente-video-premium.webp',
   '/public/icons/icon-192.png', '/public/icons/icon-512.png'
 ];
