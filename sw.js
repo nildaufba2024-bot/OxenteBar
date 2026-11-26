@@ -1,4 +1,4 @@
-const VERSION = 'oxente-visual-62';
+const VERSION = 'oxente-visual-66';
 const STATIC = `${VERSION}-static`;
 const IMAGES = `${VERSION}-images`;
 const SHELL = [
@@ -13,6 +13,7 @@ const SHELL = [
   '/public/assets/oxente-logo-reference.webp',
   '/public/assets/oxente-home-logo-approved.webp', '/public/assets/oxente-logo-cliente.png', '/public/assets/oxente-logo-cardapio-cordas.png', '/public/assets/oxente-home-background-approved.webp', '/public/assets/oxente-home-wood-approved.webp',
   '/public/assets/oxente-home-menu-reference-v2.webp', '/public/assets/oxente-home-video-reference-v2.webp', '/public/assets/oxente-home-rope-reference-v2.webp',
+  '/public/assets/beer-ice-overlay.png', '/public/assets/beer-laurel.svg', '/public/assets/beer-amstel-alpha-mask.png', '/public/assets/beer-brahma-alpha-mask.png',
   '/public/assets/brands/whatsapp.svg', '/public/assets/brands/instagram.svg', '/public/assets/brands/location.svg', '/public/assets/brands/ifood.svg',
   '/public/assets/oxente-video-premium.webp',
   '/public/icons/icon-192.png', '/public/icons/icon-512.png'

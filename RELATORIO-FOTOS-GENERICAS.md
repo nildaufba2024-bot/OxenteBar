@@ -45,9 +45,16 @@ Há capturas complementares de Beliscar em 320 px e Tábuas ou Chapas em 430 px 
 
 Os cards de produtos agora apresentam a imagem em toda a largura, em uma área quadrada que representa cerca de 75% a 80% da altura do card. As fotografias gastronômicas usam `object-fit: cover` e foco central, sem esticar o arquivo original. Nome, preço e acesso aos detalhes ficam em um rodapé amadeirado sob a fotografia. Produtos sem foto própria mantêm a logo oficial inteira, centralizada sobre madeira escura.
 
-As cervejas aprovadas continuam sem alterações nos arquivos. A seção de destaque ganhou quatro cards verticais no desktop, com garrafas inteiras, nome, volume e preço em rodapé próprio; no celular, são duas colunas. Os cards da categoria Cervejas usam a mesma apresentação de produtos, mantendo a garrafa visível.
+As cervejas aprovadas continuam sem alterações nos arquivos e no cadastro. A seção de destaque apresenta quatro cards verticais no desktop, com garrafas inteiras, gelo na base, nome, volume e preço em rodapé próprio; no celular, são duas colunas. Para Amstel e Brahma, máscaras de transparência escondem apenas o branco das fotos originais; os pixels das garrafas e rótulos permanecem dos arquivos originais. O gelo é uma camada decorativa separada e não altera essas fotos. Os cards da categoria Cervejas usam a mesma apresentação de produtos, mantendo a garrafa visível.
 
 Comparação visual: a [captura mobile dos produtos](tmp/revisao-logo/mobile/logo-beliscar-390.png) mostra os cards após o ajuste; a [captura desktop dos produtos](tmp/revisao-logo/mobile/produtos-1440.png) mostra a grade de três colunas e a [captura desktop do cardápio](tmp/revisao-logo/mobile/cardapio-1440.png) mostra o destaque das cervejas. As 16 capturas por categoria estão relacionadas na tabela acima.
+
+O [destaque das cervejas no desktop](tmp/revisao-logo/mobile/cervejas-destaque-1440.png) e a [captura mobile](tmp/revisao-logo/mobile/cervejas-destaque-390.png) registram o acabamento atualizado após a correção dos contornos e inclusão do gelo.
+
+Camadas geradas com a ferramenta integrada de imagens, sem gerar novas embalagens para exibição:
+
+- `public/assets/beer-ice-overlay.png`: prompt final — “Uma faixa esparsa e fotográfica de cubos de gelo transparentes, iluminados em âmbar, com sombra de contato, fundo totalmente transparente, sem garrafas, marcas, textos ou cenário.”
+- `public/assets/beer-amstel-alpha-mask.png` e `public/assets/beer-brahma-alpha-mask.png`: prompt final — “Remover somente o fundo branco da fotografia original e produzir transparência com borda suave, mantendo tamanho e silhueta da garrafa; a saída será usada apenas pelo canal alfa.” Os pixels visíveis dos rótulos continuam vindo das fotografias originais.
 
 ## Testes
 
@@ -56,7 +63,7 @@ Comparação visual: a [captura mobile dos produtos](tmp/revisao-logo/mobile/log
 - Auditoria no navegador: 34 verificações de viewport; as 16 categorias capturadas a 390 px, com categorias prioritárias também verificadas a 320, 360 e 430 px.
 - Nenhuma foto de demonstração renderizada, nenhum aviso “IMAGEM ILUSTRATIVA”, nenhuma rolagem horizontal, erro de JavaScript ou requisição local quebrada.
 - Supabase público consultado em modo leitura: 111 produtos, zero fotos e zero galerias remotas sobrepondo o mapeamento local.
-- PWA: cache atualizado para `oxente-visual-62`; navegação e recarga offline verificadas.
+- PWA: cache atualizado para `oxente-visual-66`; navegação e recarga offline verificadas.
 - Busca, categorias, abertura de detalhes, navegação inferior, links sociais e preços existentes continuaram operacionais.
 - Nova inspeção visual: 15 cards de Beliscar verificados em 320, 360, 390, 430, 768 e 1440 px; 111 imagens carregadas nas 16 categorias a 390 px. Nenhum nome ou preço cortado, texto sobreposto ou rolagem horizontal.
 

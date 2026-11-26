@@ -85,7 +85,9 @@
       const image=photo(p),name=e(p.name);
       const parts=/^(.*?)\s+(600ml)$/i.exec(p.name);
       const display=parts?'<span class="beer-brand">'+e(parts[1])+'</span> <span class="beer-volume">'+e(parts[2])+'</span>':name;
-      return '<button type="button" class="beer-card" data-beer-product="'+e(p.id)+'" aria-label="Ver detalhes de '+name+'"><div class="beer-photo">'+(image.url?'<img class="beer-ambient" src="'+e(image.url)+'"'+responsive(image.url,'30vw')+' alt="" aria-hidden="true" loading="lazy" decoding="async" width="360" height="480"><img class="beer-bottle" src="'+e(image.url)+'"'+responsive(image.url,'30vw')+' alt="Imagem de '+name+'" loading="lazy" decoding="async" width="360" height="480">':'')+'</div><div class="beer-copy"><strong>'+display+'</strong><span>'+price(p)+'</span></div></button>';
+      const bottle=image.url.replace(/-wood\.webp$/,'-reference.webp');
+      const bottleMask=/beer-(?:amstel|brahma)-600ml-reference\.webp$/.test(bottle)?' beer-card--masked'+(bottle.includes('brahma')?' beer-card--brahma':''):'';
+      return '<button type="button" class="beer-card'+bottleMask+'" data-beer-product="'+e(p.id)+'" aria-label="Ver detalhes de '+name+'"><div class="beer-photo">'+(image.url?'<img class="beer-bottle" src="'+e(bottle)+'"'+responsive(bottle,'30vw')+' alt="Imagem de '+name+'" loading="lazy" decoding="async" width="720" height="720"><span class="beer-ice" aria-hidden="true"></span>':'')+'</div><div class="beer-copy"><strong>'+display+'</strong><span>'+price(p)+'</span></div></button>';
     }).join('')+'</div>';
     const visibleIds=new Set(cats.map(c=>c.id));
     const search=norm(query);

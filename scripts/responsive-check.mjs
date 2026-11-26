@@ -81,6 +81,18 @@ try {
         await evaluate(`(async()=>{const images=[...document.querySelectorAll('img')];images.forEach(img=>img.loading='eager');await Promise.race([Promise.all(images.map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,6000))]);return true})()`);
         const screenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
         await writeFile(join(output, `${page === '/' ? 'inicio' : 'cardapio'}-${width}.png`), Buffer.from(screenshot.data, 'base64'));
+        if(page==='/cardapio/' && [390,1440].includes(width)){
+          if(width===390){
+            await evaluate(`document.querySelector('#beerSpotlight').scrollIntoView({block:'start'})`);
+            await delay(300);
+            const beerShot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});
+            await writeFile(join(output,'cervejas-destaque-390.png'),Buffer.from(beerShot.data,'base64'));
+          }else{
+            const region=await evaluate(`(()=>{const r=document.querySelector('#beerSpotlight').getBoundingClientRect();return {x:Math.max(0,Math.floor(r.left)-5),y:Math.max(0,Math.floor(r.top+scrollY)-5),width:Math.ceil(r.width)+10,height:Math.ceil(r.height)+10}})()`);
+            const beerShot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,clip:{...region,scale:1}});
+            await writeFile(join(output,'cervejas-destaque-1440.png'),Buffer.from(beerShot.data,'base64'));
+          }
+        }
         if (page === '/cardapio/' && [320, 360, 390, 430, 768, 1440].includes(width)) {
           await evaluate(`document.querySelector('[data-category="beliscar"]')?.click()`);
           await delay(900);
@@ -219,6 +231,7 @@ try {
   if(await evaluate(`document.body.innerText.includes('IMAGEM ILUSTRATIVA')`))throw new Error('O aviso de imagem ilustrativa ainda aparece no cardápio.');
   const toFrito=auditedImages.find(image=>image.id==='beliscar-002');
   if(toFrito?.file!=='oxente-logo-cliente.png')throw new Error('Tó Frito não usa a logomarca oficial.');
+  if(badLocalResponses.length)throw new Error(`Recursos locais indisponíveis: ${[...new Set(badLocalResponses)].join(', ')}.`);
   const result = { records, productViews, beverageViews, phase2Views, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
   await writeFile(join(output, 'results.json'), JSON.stringify(result, null, 2));
   console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, beverageViews, chronologicalLoaded:chronologicalImages.length, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));

@@ -193,3 +193,45 @@ body.menu-page::before{
   .menu-page .beer-copy .beer-volume{font-size:clamp(11px,3vw,14px)}
   .menu-page .beer-copy>span{min-width:66%;padding:4px 7px;font-size:clamp(12px,3.4vw,16px)}
 }
+
+/* Cervejas em destaque: garrafas originais sobre o cenário rústico, como na referência. */
+.menu-page .beer-heading{min-height:112px;gap:16px;margin-bottom:18px}
+.menu-page .beer-heading>div{width:min(44vw,610px);min-width:0;min-height:104px;gap:18px;padding:13px 34px;border:2px solid #a45a18;border-radius:10px;background:linear-gradient(#3d1708b8,#251006c9),url('../public/assets/oxente-home-wood-approved.webp') center/cover;box-shadow:inset 0 2px 0 #ffe08488,inset 0 -3px 0 #150501ad,0 8px 16px #000a}
+.menu-page .beer-heading>div::before,.menu-page .beer-heading>div::after{top:-17px;width:11px;height:27px}
+.menu-page .beer-heading svg{width:62px;height:62px;color:#ffc225}
+.menu-page .beer-heading h2{font:italic 700 clamp(35px,4.4vw,67px)/1 var(--ox-display);letter-spacing:-.015em}
+.menu-page .beer-all{min-height:54px;padding:10px 22px;font-size:clamp(13px,1.25vw,17px);color:#fff3df}
+.menu-page .beer-grid{gap:12px}
+.menu-page .beer-card{aspect-ratio:.6;border-width:2.5px;border-radius:27px;background:#1a0804}
+.menu-page .beer-photo{inset:0 0 28% 0;background:#1a0702}
+.menu-page .beer-photo::before{content:"";position:absolute;inset:-12px;background:linear-gradient(#18070375,#1706029e),url('../public/assets/oxente-wallpaper-desktop.webp') center/cover;filter:blur(7px) brightness(.72);transform:scale(1.04)}
+.menu-page .beer-photo::after{content:"";position:absolute;z-index:1;inset:auto 0 0;height:15%;border-top:1px solid #c2742299;background:linear-gradient(#a1501247,#2a1008b3),url('../public/assets/oxente-home-wood-approved.webp') center/cover;box-shadow:0 -8px 18px #10050188}
+.menu-page .beer-photo .beer-bottle{position:absolute;z-index:2;top:0;left:50%;width:auto;height:97%;max-width:none;object-fit:contain;object-position:center;transform:translateX(-50%);filter:drop-shadow(4px 8px 6px #0009)}
+.menu-page .beer-card--masked .beer-bottle{mask-image:url('../public/assets/beer-amstel-alpha-mask.png');mask-mode:alpha;mask-size:100% 100%;mask-repeat:no-repeat}
+.menu-page .beer-card--brahma .beer-bottle{mask-image:url('../public/assets/beer-brahma-alpha-mask.png')}
+.menu-page .beer-ice{position:absolute;z-index:3;left:-12%;bottom:-1%;width:124%;aspect-ratio:3/1;background:url('../public/assets/beer-ice-overlay.png') center bottom/contain no-repeat;pointer-events:none;filter:drop-shadow(0 2px 2px #0a0402aa)}
+.menu-page .beer-copy{min-height:28%;gap:6px;padding:9px 10px 13px;background:linear-gradient(#4d2109d9,#230c04f0),url('../public/assets/oxente-home-wood-approved.webp') center/cover}
+.menu-page .beer-copy::before,.menu-page .beer-copy::after{content:"";position:absolute;top:39%;left:8%;width:21%;height:32px;background:url('../public/assets/beer-laurel.svg') center/contain no-repeat}
+.menu-page .beer-copy::after{left:auto;right:8%;transform:scaleX(-1)}
+.menu-page .beer-copy .beer-brand{font:700 clamp(23px,2.5vw,39px)/1 var(--ox-display)}
+.menu-page .beer-copy .beer-volume{margin-top:4px;font:700 clamp(13px,1.3vw,19px)/1 var(--ox-sans)}
+.menu-page .beer-copy>span{min-width:68%;padding:8px 12px;font-size:clamp(17px,1.7vw,25px)}
+@media(max-width:850px){
+  .menu-page .beer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .menu-page .beer-heading{min-height:0}
+}
+@media(max-width:700px){
+  .menu-page .beer-heading{gap:5px;margin-bottom:9px}
+  .menu-page .beer-heading>div{width:auto;min-height:46px;gap:6px;padding:5px 10px;border-width:1.5px}
+  .menu-page .beer-heading svg{width:26px;height:26px}
+  .menu-page .beer-heading h2{font-size:clamp(20px,5.6vw,29px)}
+  .menu-page .beer-all{min-height:38px;padding:6px 10px;font-size:11px}
+  .menu-page .beer-card{aspect-ratio:.61;border-radius:15px;border-width:1.5px}
+  .menu-page .beer-photo{inset:0 0 30% 0}
+  .menu-page .beer-copy{min-height:30%;gap:2px;padding:5px 3px 7px}
+  .menu-page .beer-copy .beer-brand{font-size:clamp(16px,4.7vw,25px)}
+  .menu-page .beer-copy .beer-volume{margin-top:2px;font-size:clamp(10px,3vw,14px)}
+  .menu-page .beer-copy>span{min-width:70%;padding:4px 7px;font-size:clamp(12px,3.5vw,17px)}
+  .menu-page .beer-copy::before,.menu-page .beer-copy::after{top:40%;left:3%;width:21%;height:20px}
+  .menu-page .beer-copy::after{left:auto;right:3%}
+}
