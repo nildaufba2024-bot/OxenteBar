@@ -13,14 +13,6 @@
   const norm=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR');
   const price=p=>!T.fresh?'<span class="price-offline">Preço sob consulta ao reconectar</span>':p.pricePromo!=null?'<s>'+T.money(p.price)+'</s> '+T.money(p.pricePromo):T.money(p.price);
   const photo=p=>p.imageUrl==='photo:none'?{url:'',illustrative:false}:p.imageUrl?{url:T.imageUrl(p.imageUrl),illustrative:!!p.imageIllustrative}:{...(window.OXENTE_PHOTOS?.[p.id]||{}),url:window.OXENTE_PHOTOS?.[p.id]?.url||''};
-  const spotlightAssets={
-    'cervejas-098':'heineken-long-illustrative.webp',
-    'cervejas-101':'heineken-600-illustrative.webp',
-    'cervejas-102':'stella-600-illustrative.webp',
-    'cervejas-106':'amstel-600-illustrative.webp',
-    'cervejas-107':'brahma-600-illustrative.webp'
-  };
-  const spotlightPhoto=p=>p.imageUrl||!spotlightAssets[p.id]?photo(p):{url:'../public/assets/products/'+spotlightAssets[p.id],illustrative:true};
   const responsive=(img,mobileWidth='48vw')=>img.startsWith('../public/assets/products/')&&img.endsWith('.webp')?' srcset="'+e(img.replace(/\.webp$/, '-small.webp'))+' 360w, '+e(img.replace(/\.webp$/, '-medium.webp'))+' 720w" sizes="(max-width:700px) '+mobileWidth+', (max-width:1000px) 45vw, 31vw"':'';
   const iconPaths={
     todos:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h6"/>',
@@ -89,7 +81,7 @@
     for(const p of beers){if(highlighted.length>=4)break;if(!highlighted.includes(p))highlighted.push(p)}
     beerSpotlight.hidden=!landing||!highlighted.length||!!query;
     beerSpotlight.innerHTML='<div class="beer-heading"><div>'+icon('cervejas')+'<h2>Cervejas</h2></div><button type="button" class="beer-all">Ver todas <span aria-hidden="true">›</span></button></div><div class="beer-grid">'+highlighted.map(p=>{
-      const image=spotlightPhoto(p),name=e(p.name);
+      const image=photo(p),name=e(p.name);
       return '<button type="button" class="beer-card" data-beer-product="'+e(p.id)+'" aria-label="Ver detalhes de '+name+'"><div class="beer-photo">'+(image.url?'<img class="beer-ambient" src="'+e(image.url)+'"'+responsive(image.url,'30vw')+' alt="" aria-hidden="true" loading="lazy" decoding="async" width="360" height="480"><img class="beer-bottle" src="'+e(image.url)+'"'+responsive(image.url,'30vw')+' alt="Imagem de '+name+'" loading="lazy" decoding="async" width="360" height="480">':'')+'</div><div class="beer-copy"><strong>'+name+'</strong><span>'+price(p)+'</span></div></button>';
     }).join('')+'</div>';
     const visibleIds=new Set(cats.map(c=>c.id));

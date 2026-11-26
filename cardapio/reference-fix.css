@@ -47,9 +47,9 @@ body.menu-page::before{
 .menu-page .beer-copy{top:auto;bottom:0;left:0;right:0;gap:2px;align-items:center;padding:8px 6px 7px;text-align:center}
 .menu-page .beer-copy strong{font-size:clamp(16px,1.9vw,25px);line-height:1.05}
 .menu-page .beer-copy>span{padding:3px 8px;border-radius:10px;font-size:clamp(11px,1.2vw,16px)}
-.menu-page .product-card--beer .product-image{background:#f8f7f3}
+.menu-page .product-card--beer .product-image{background:#210d05}
 .menu-page .product-card--beer .product-image img{object-fit:contain;object-position:center;padding:6px}
-.menu-page .product-dialog--beer .dialog-media{background:#f8f7f3}
+.menu-page .product-dialog--beer .dialog-media{background:#210d05}
 .menu-page .product-dialog--beer .dialog-main-photo{object-fit:contain;padding:14px}
 .menu-page .product-card--soda .product-image{background:#211008}
 .menu-page .product-card--soda .product-image img{object-fit:contain}
