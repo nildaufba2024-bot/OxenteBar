@@ -117,7 +117,7 @@
       return ca-cb||a.order-b.order;
     });
     const selected=cats.find(c=>c.id===active);
-    const summaryText=search?shown.length+' '+(shown.length===1?'item encontrado':'itens encontrados'):selected?.description||'';
+    const summaryText=search?shown.length+' '+(shown.length===1?'item encontrado':'itens encontrados'):'';
     summary.innerHTML='<div class="summary-name">'+icon(search?'todos':active)+'<h2>'+e(search?'Resultados da busca':selected?.label||'Todos os sabores')+'</h2></div>'+
       (summaryText?'<p>'+e(summaryText)+'</p>':'');
     summary.hidden=landing&&!query;
@@ -135,13 +135,17 @@
     if(!p)return;
     const cat=state.categories.find(c=>c.id===p.category);
     const image=photo(p),main=p.category==='cervejas'?beerImage(p):image.url,gallery=(p.gallery||[]).map(T.imageUrl).filter(Boolean);
+    const baseDescription=(p.fullDescription||p.description||'').trim();
+    const categoryNote=(cat?.description||'').trim();
+    const description=[baseDescription,categoryNote&&!norm(baseDescription).includes(norm(categoryNote))?categoryNote:''].filter(Boolean).join(' ');
+    const alreadyInDescription=value=>value&&norm(description).includes(norm(value));
     const details=[
       ['INGREDIENTES',p.ingredients],
-      ['ACOMPANHAMENTOS',p.accompaniments],
-      ['PORÇÃO',p.portion],
+      ['ACOMPANHAMENTOS',alreadyInDescription(p.accompaniments)?'':p.accompaniments],
+      ['PORÇÃO',alreadyInDescription(p.portion)?'':p.portion],
       ['SERVE',p.serves],
       ['ALERGÊNICOS',p.allergens],
-      ['OBSERVAÇÕES',p.notes||cat?.description]
+      ['OBSERVAÇÕES',p.notes]
     ].filter(x=>x[1]);
     dialog.classList.toggle('product-dialog--no-photo',!main&&!gallery.length);
     dialog.classList.toggle('product-dialog--beer',p.category==='cervejas');
@@ -150,7 +154,7 @@
         (gallery.length?'<div class="dialog-gallery">'+gallery.map(url=>'<img src="'+e(url)+'" alt="Foto adicional de '+e(p.name)+'">').join('')+'</div>':'')+'</div>':'')+
       '<div class="dialog-details"><p class="eyebrow">'+e(cat?.label||'')+'</p><h2 id="dialogTitle">'+e(p.name)+'</h2>'+
       '<div class="dialog-price">'+price(p)+(p.unavailable&&T.fresh?'<span>INDISPONÍVEL</span>':'')+'</div>'+
-      (p.fullDescription||p.description?'<p class="dialog-description">'+e(p.fullDescription||p.description)+'</p>':'')+
+      (description?'<p class="dialog-description">'+e(description)+'</p>':'')+
       (details.length||p.variations?.length?'<dl>'+details.map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+e(value)+'</dd></div>').join('')+
         (p.variations?.length?'<div><dt>VARIAÇÕES</dt><dd>'+p.variations.map(v=>e(v.name)+' — '+T.money(v.price)).join('<br>')+'</dd></div>':'')+'</dl>':'')+
       '<div class="dialog-actions"><button type="button" class="text-button close-text">VOLTAR AO CARDÁPIO</button></div></div>';
