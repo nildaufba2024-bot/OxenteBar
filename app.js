@@ -14,6 +14,15 @@
   const price=p=>!T.fresh?'<span class="price-offline">Preço sob consulta ao reconectar</span>':p.pricePromo!=null?'<s>'+T.money(p.price)+'</s> '+T.money(p.pricePromo):T.money(p.price);
   const photo=p=>p.imageUrl==='photo:none'?{url:'',illustrative:false}:p.imageUrl?{url:T.imageUrl(p.imageUrl),illustrative:!!p.imageIllustrative}:{...(window.OXENTE_PHOTOS?.[p.id]||{}),url:window.OXENTE_PHOTOS?.[p.id]?.url||''};
   const isOfficialLogo=url=>url?.endsWith('/oxente-logo-cliente.png');
+  const beerArtwork={
+    'cervejas-098':'heineken-long-330ml','cervejas-099':'corona-long-330ml',
+    'cervejas-100':'eisenbahn-long-355ml','cervejas-101':'heineken-600ml',
+    'cervejas-102':'stella-600ml','cervejas-103':'spaten-600ml',
+    'cervejas-104':'budweiser-600ml','cervejas-105':'eisenbahn-600ml',
+    'cervejas-106':'amstel-600ml','cervejas-107':'brahma-600ml',
+    'cervejas-108':'devassa-600ml','cervejas-109':'itaipava-600ml'
+  };
+  const beerImage=p=>beerArtwork[p.id]?'../public/assets/beer-art-'+beerArtwork[p.id]+'.webp':photo(p).url;
   const responsive=(img,mobileWidth='48vw')=>img.startsWith('../public/assets/products/')&&img.endsWith('.webp')?' srcset="'+e(img.replace(/\.webp$/, '-small.webp'))+' 360w, '+e(img.replace(/\.webp$/, '-medium.webp'))+' 720w" sizes="(max-width:700px) '+mobileWidth+', (max-width:1000px) 45vw, 31vw"':'';
   const iconPaths={
     todos:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h6"/>',
@@ -37,6 +46,11 @@
   const icon=id=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(iconPaths[id]||iconPaths.todos)+'</svg>';
   const missingPhoto='<div class="product-image product-image--pending"><span>FOTOGRAFIA EM PREPARAÇÃO</span></div>';
   function card(p){
+    if(p.category==='cervejas'){
+      const img=beerImage(p),label=e(p.name),parts=/^(.*?)\s+(\d+(?:\s?ml|\s?l))$/i.exec(p.name);
+      const title=parts?'<span class="beer-product-brand">'+e(parts[1])+'</span> <span class="beer-product-volume">'+e(parts[2])+'</span>':label;
+      return '<article class="product-card product-card--beer beer-catalog-card '+(p.unavailable&&T.fresh?'is-unavailable':'')+'"><button type="button" class="product-open" data-product="'+e(p.id)+'" aria-label="Ver detalhes de '+label+'"><div class="product-image"><img src="'+e(img)+'" alt="Imagem de '+label+'" loading="lazy" decoding="async" width="416" height="514"></div><div class="product-info"><div class="product-title"><h3>'+title+'</h3></div><div class="product-bottom"><span class="price-pill">'+price(p)+'</span></div>'+(p.unavailable&&T.fresh?'<span class="unavailable-badge">INDISPONÍVEL</span>':'')+'</div></button></article>';
+    }
     const image=photo(p),img=image.url;
     const imageSources=responsive(img,'94vw');
     const label=e(p.name);
@@ -86,12 +100,10 @@
     for(const p of beers){if(highlighted.length>=4)break;if(!highlighted.includes(p))highlighted.push(p)}
     beerSpotlight.hidden=!landing||!highlighted.length||!!query;
     beerSpotlight.innerHTML='<div class="beer-heading"><div>'+icon('cervejas')+'<h2>Cervejas</h2></div><button type="button" class="beer-all">Ver todas <span aria-hidden="true">›</span></button></div><div class="beer-grid">'+highlighted.map(p=>{
-      const image=photo(p),name=e(p.name);
+      const image=beerImage(p),name=e(p.name);
       const parts=/^(.*?)\s+(600ml)$/i.exec(p.name);
       const display=parts?'<span class="beer-brand">'+e(parts[1])+'</span> <span class="beer-volume">'+e(parts[2])+'</span>':name;
-      const bottle=image.url.replace(/-wood\.webp$/,'-reference.webp');
-      const bottleMask=/beer-(?:amstel|brahma)-600ml-reference\.webp$/.test(bottle)?' beer-card--masked'+(bottle.includes('brahma')?' beer-card--brahma':''):'';
-      return '<button type="button" class="beer-card'+bottleMask+'" data-beer-product="'+e(p.id)+'" aria-label="Ver detalhes de '+name+'"><div class="beer-photo">'+(image.url?'<img class="beer-bottle" src="'+e(bottle)+'"'+responsive(bottle,'30vw')+' alt="Imagem de '+name+'" loading="lazy" decoding="async" width="720" height="720"><span class="beer-ice" aria-hidden="true"></span>':'')+'</div><div class="beer-copy"><strong>'+display+'</strong><span>'+price(p)+'</span></div></button>';
+      return '<button type="button" class="beer-card" data-beer-product="'+e(p.id)+'" aria-label="Ver detalhes de '+name+'"><div class="beer-photo"><img class="beer-bottle" src="'+e(image)+'" alt="Imagem de '+name+'" loading="lazy" decoding="async" width="416" height="514"></div><div class="beer-copy"><strong>'+display+'</strong><span>'+price(p)+'</span></div></button>';
     }).join('')+'</div>';
     const visibleIds=new Set(cats.map(c=>c.id));
     const search=norm(query);
@@ -109,6 +121,7 @@
       (summaryText?'<p>'+e(summaryText)+'</p>':'');
     summary.hidden=landing&&!query;
     grid.hidden=landing&&!query;
+    grid.classList.toggle('product-grid--beers',shown.length>0&&shown.every(p=>p.category==='cervejas'));
     grid.innerHTML=grid.hidden?'':shown.map(card).join('');
     document.querySelector('#resultCount').textContent=shown.length+' '+(shown.length===1?'item':'itens');
     clearSearch.hidden=!query;
@@ -120,7 +133,7 @@
     const state=T.get(),p=state.products.find(x=>x.id===id);
     if(!p)return;
     const cat=state.categories.find(c=>c.id===p.category);
-    const image=photo(p),main=image.url,gallery=(p.gallery||[]).map(T.imageUrl).filter(Boolean);
+    const image=photo(p),main=p.category==='cervejas'?beerImage(p):image.url,gallery=(p.gallery||[]).map(T.imageUrl).filter(Boolean);
     const details=[
       ['INGREDIENTES',p.ingredients],
       ['ACOMPANHAMENTOS',p.accompaniments],

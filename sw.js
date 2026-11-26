@@ -1,4 +1,4 @@
-const VERSION = 'oxente-visual-67';
+const VERSION = 'oxente-visual-68';
 const STATIC = `${VERSION}-static`;
 const IMAGES = `${VERSION}-images`;
 const SHELL = [
@@ -18,6 +18,12 @@ const SHELL = [
   '/public/assets/feature-pastelzinho-640.webp', '/public/assets/feature-pastelzinho-1280.webp',
   '/public/assets/feature-bolinhos-640.webp', '/public/assets/feature-bolinhos-1280.webp',
   '/public/assets/feature-do-mar-640.webp', '/public/assets/feature-do-mar-1280.webp',
+  '/public/assets/beer-art-heineken-600ml.webp', '/public/assets/beer-art-stella-600ml.webp',
+  '/public/assets/beer-art-amstel-600ml.webp', '/public/assets/beer-art-brahma-600ml.webp',
+  '/public/assets/beer-art-budweiser-600ml.webp', '/public/assets/beer-art-spaten-600ml.webp',
+  '/public/assets/beer-art-eisenbahn-600ml.webp', '/public/assets/beer-art-devassa-600ml.webp',
+  '/public/assets/beer-art-itaipava-600ml.webp', '/public/assets/beer-art-heineken-long-330ml.webp',
+  '/public/assets/beer-art-corona-long-330ml.webp', '/public/assets/beer-art-eisenbahn-long-355ml.webp',
   '/public/assets/brands/whatsapp.svg', '/public/assets/brands/instagram.svg', '/public/assets/brands/location.svg', '/public/assets/brands/ifood.svg',
   '/public/assets/oxente-video-premium.webp',
   '/public/icons/icon-192.png', '/public/icons/icon-512.png'

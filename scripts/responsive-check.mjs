@@ -222,14 +222,14 @@ try {
   await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: standaloneScript });
   for(const width of [320,390]){
     const beerView=beverageViews.find(x=>x.width===width&&x.category==='cervejas'),sodaView=beverageViews.find(x=>x.width===width&&x.category==='refrigerantes');
-    if(!beerView||beerView.names[0]!=='Heineken 600ml'||beerView.names.slice(0,9).some(x=>!x.includes('600ml'))||beerView.names.slice(9).some(x=>!x.includes('Long'))||beerView.images.some(x=>!x.loaded)||beerView.overflow)throw new Error(`A ordem ou as imagens das cervejas falharam em ${width}px.`);
+    if(!beerView||beerView.names[0]!=='Heineken 600ml'||beerView.names.slice(0,9).some(x=>!x.includes('600ml'))||beerView.names.slice(9).some(x=>!x.includes('Long'))||beerView.images.some(x=>!x.loaded||!/^beer-art-[a-z0-9-]+\.webp$/.test(x.file))||new Set(beerView.images.map(x=>x.file)).size!==12||beerView.overflow)throw new Error(`A ordem ou as imagens das cervejas falharam em ${width}px.`);
     if(!sodaView||sodaView.names.length!==2||!sodaView.prices[1]?.includes('8,00')||sodaView.images.some(x=>!x.loaded)||sodaView.overflow)throw new Error(`Os refrigerantes falharam em ${width}px.`);
   }
   const chronologicalImages=phase2Views.filter(view=>view.width===390).flatMap(view=>view.images.filter(image=>image.file?.startsWith('cronologica-')));
   if(chronologicalImages.length!==34||chronologicalImages.some(image=>!image.loaded)||phase2Views.some(view=>view.overflow))throw new Error('As 34 artes cronológicas não carregaram corretamente no mobile.');
   const auditedImages=phase2Views.filter(view=>view.width===390).flatMap(view=>view.images);
   const logoImages=auditedImages.filter(image=>image.file==='oxente-logo-cliente.png');
-  const beerImages=auditedImages.filter(image=>/^beer-.*-wood(?:-small|-medium)?\.webp$/.test(image.file||''));
+  const beerImages=auditedImages.filter(image=>/^beer-art-[a-z0-9-]+\.webp$/.test(image.file||''));
   const guarana=auditedImages.find(image=>image.id==='refrigerantes-111');
   if(auditedImages.length!==111||logoImages.length!==64||beerImages.length!==12||!/^refrigerante-lata-trio-ilustrativo-(?:small|medium)\.webp$/.test(guarana?.file||'')||auditedImages.some(image=>!image.loaded||!image.file))throw new Error(`A auditoria de imagens aprovadas e logomarcas falhou: total=${auditedImages.length}, logos=${logoImages.length}, cervejas=${beerImages.length}, guaraná=${guarana?.file}, pendentes=${auditedImages.filter(image=>!image.loaded||!image.file).map(image=>image.id+':'+image.file).join(',')}.`);
   if(auditedImages.some(image=>/demo|generico/i.test(image.file)))throw new Error('Uma imagem genérica ainda aparece no cardápio.');
