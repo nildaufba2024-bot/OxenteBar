@@ -1,4 +1,4 @@
-const VERSION = 'oxente-visual-60';
+const VERSION = 'oxente-visual-62';
 const STATIC = `${VERSION}-static`;
 const IMAGES = `${VERSION}-images`;
 const SHELL = [

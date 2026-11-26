@@ -13,6 +13,7 @@
   const norm=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('pt-BR');
   const price=p=>!T.fresh?'<span class="price-offline">Preço sob consulta ao reconectar</span>':p.pricePromo!=null?'<s>'+T.money(p.price)+'</s> '+T.money(p.pricePromo):T.money(p.price);
   const photo=p=>p.imageUrl==='photo:none'?{url:'',illustrative:false}:p.imageUrl?{url:T.imageUrl(p.imageUrl),illustrative:!!p.imageIllustrative}:{...(window.OXENTE_PHOTOS?.[p.id]||{}),url:window.OXENTE_PHOTOS?.[p.id]?.url||''};
+  const isOfficialLogo=url=>url?.endsWith('/oxente-logo-cliente.png');
   const responsive=(img,mobileWidth='48vw')=>img.startsWith('../public/assets/products/')&&img.endsWith('.webp')?' srcset="'+e(img.replace(/\.webp$/, '-small.webp'))+' 360w, '+e(img.replace(/\.webp$/, '-medium.webp'))+' 720w" sizes="(max-width:700px) '+mobileWidth+', (max-width:1000px) 45vw, 31vw"':'';
   const iconPaths={
     todos:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h6"/>',
@@ -37,16 +38,16 @@
   const missingPhoto='<div class="product-image product-image--pending"><span>FOTOGRAFIA EM PREPARAÇÃO</span></div>';
   function card(p){
     const image=photo(p),img=image.url;
-    const imageSources=responsive(img,'34vw');
+    const imageSources=responsive(img,'94vw');
     const label=e(p.name);
     const description=e(p.shortDescription||p.description||'');
     return '<article class="product-card '+(p.category==='cervejas'?'product-card--beer ':'')+(p.category==='refrigerantes'?'product-card--soda ':'')+(p.featured?'product-card--featured ':'')+(p.unavailable&&T.fresh?'is-unavailable ':'')+(!img?'product-card--no-image':'')+'">'+
       '<button type="button" class="product-open" data-product="'+e(p.id)+'" aria-label="Ver detalhes de '+label+'">'+
-      (img?'<div class="product-image"><img src="'+e(img)+'"'+imageSources+' alt="Imagem de '+label+'" loading="lazy" decoding="async" width="640" height="480"></div>':missingPhoto)+
+      (img?'<div class="product-image"><img src="'+e(img)+'"'+imageSources+' alt="'+(isOfficialLogo(img)?'Logomarca oficial do Oxente':'Imagem de '+label)+'" loading="lazy" decoding="async" width="640" height="480"></div>':missingPhoto)+
       '<div class="product-info">'+(p.featured?'<span class="product-badge">DESTAQUE</span>':'')+
       '<div class="product-title"><h3>'+label+'</h3></div>'+
       (description?'<p>'+description+'</p>':'')+
-      '<div class="product-bottom"><span class="price-pill">'+price(p)+'</span><span class="details-cta">VER DETALHES <span aria-hidden="true">↗</span></span></div>'+
+      '<div class="product-bottom"><span class="price-pill">'+price(p)+'</span><span class="details-cta">Ver detalhes <span aria-hidden="true">›</span></span></div>'+
       (p.unavailable&&T.fresh?'<span class="unavailable-badge">INDISPONÍVEL</span>':'')+
       '</div></button></article>';
   }
@@ -73,7 +74,7 @@
       const product=state.products.find(p=>p.active!==false&&p.category===c.id&&photo(p).url);
       const fallback=product?photo(product):{url:'../public/assets/oxente-menu-premium.webp',illustrative:true};
       const image=direct?{url:direct,illustrative:false}:fallback;
-      return '<button type="button" class="feature-card" data-feature-category="'+e(c.id)+'" aria-label="Ver categoria '+e(c.label)+'"><img src="'+e(image.url)+'"'+responsive(image.url)+' alt="Imagem da categoria '+e(c.label)+'" loading="lazy" decoding="async" width="640" height="480"><span class="feature-shade"></span><strong>'+e(c.label)+'</strong><span class="feature-go" aria-hidden="true">›</span></button>';
+      return '<button type="button" class="feature-card" data-feature-category="'+e(c.id)+'" aria-label="Ver categoria '+e(c.label)+'"><img src="'+e(image.url)+'"'+responsive(image.url)+' alt="'+(isOfficialLogo(image.url)?'Logomarca oficial do Oxente':'Imagem da categoria '+e(c.label))+'" loading="lazy" decoding="async" width="640" height="480"><span class="feature-shade"></span><strong>'+e(c.label)+'</strong><span class="feature-go" aria-hidden="true">›</span></button>';
     }).join('')+'</div>';
     const beers=state.products.filter(p=>p.active!==false&&p.category==='cervejas');
     const beerNames=['heineken 600ml','stella 600ml','amstel 600ml','brahma 600ml'];
@@ -82,7 +83,9 @@
     beerSpotlight.hidden=!landing||!highlighted.length||!!query;
     beerSpotlight.innerHTML='<div class="beer-heading"><div>'+icon('cervejas')+'<h2>Cervejas</h2></div><button type="button" class="beer-all">Ver todas <span aria-hidden="true">›</span></button></div><div class="beer-grid">'+highlighted.map(p=>{
       const image=photo(p),name=e(p.name);
-      return '<button type="button" class="beer-card" data-beer-product="'+e(p.id)+'" aria-label="Ver detalhes de '+name+'"><div class="beer-photo">'+(image.url?'<img class="beer-ambient" src="'+e(image.url)+'"'+responsive(image.url,'30vw')+' alt="" aria-hidden="true" loading="lazy" decoding="async" width="360" height="480"><img class="beer-bottle" src="'+e(image.url)+'"'+responsive(image.url,'30vw')+' alt="Imagem de '+name+'" loading="lazy" decoding="async" width="360" height="480">':'')+'</div><div class="beer-copy"><strong>'+name+'</strong><span>'+price(p)+'</span></div></button>';
+      const parts=/^(.*?)\s+(600ml)$/i.exec(p.name);
+      const display=parts?'<span class="beer-brand">'+e(parts[1])+'</span> <span class="beer-volume">'+e(parts[2])+'</span>':name;
+      return '<button type="button" class="beer-card" data-beer-product="'+e(p.id)+'" aria-label="Ver detalhes de '+name+'"><div class="beer-photo">'+(image.url?'<img class="beer-ambient" src="'+e(image.url)+'"'+responsive(image.url,'30vw')+' alt="" aria-hidden="true" loading="lazy" decoding="async" width="360" height="480"><img class="beer-bottle" src="'+e(image.url)+'"'+responsive(image.url,'30vw')+' alt="Imagem de '+name+'" loading="lazy" decoding="async" width="360" height="480">':'')+'</div><div class="beer-copy"><strong>'+display+'</strong><span>'+price(p)+'</span></div></button>';
     }).join('')+'</div>';
     const visibleIds=new Set(cats.map(c=>c.id));
     const search=norm(query);
@@ -123,7 +126,7 @@
     dialog.classList.toggle('product-dialog--no-photo',!main&&!gallery.length);
     dialog.classList.toggle('product-dialog--beer',p.category==='cervejas');
     document.querySelector('#dialogContent').innerHTML=
-      (main||gallery.length?'<div class="dialog-media">'+(main?'<img class="dialog-main-photo" src="'+e(main)+'" alt="Imagem de '+e(p.name)+'" width="800" height="600">':'')+
+      (main||gallery.length?'<div class="dialog-media">'+(main?'<img class="dialog-main-photo" src="'+e(main)+'" alt="'+(isOfficialLogo(main)?'Logomarca oficial do Oxente':'Imagem de '+e(p.name))+'" width="800" height="600">':'')+
         (gallery.length?'<div class="dialog-gallery">'+gallery.map(url=>'<img src="'+e(url)+'" alt="Foto adicional de '+e(p.name)+'">').join('')+'</div>':'')+'</div>':'')+
       '<div class="dialog-details"><p class="eyebrow">'+e(cat?.label||'')+'</p><h2 id="dialogTitle">'+e(p.name)+'</h2>'+
       '<div class="dialog-price">'+price(p)+(p.unavailable&&T.fresh?'<span>INDISPONÍVEL</span>':'')+'</div>'+
