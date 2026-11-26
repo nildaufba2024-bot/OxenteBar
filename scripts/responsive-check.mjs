@@ -237,7 +237,7 @@ try {
   const toFrito=auditedImages.find(image=>image.id==='beliscar-002');
   if(toFrito?.file!=='oxente-logo-cliente.png')throw new Error('Tó Frito não usa a logomarca oficial.');
   const approvedOrder=['beliscar','pastelzinho','bolinhos','do-mar'];
-  if(featureViews.some(view=>view.cards.length!==4||view.cards.some((card,index)=>card.category!==approvedOrder[index]||!new RegExp(`^feature-${approvedOrder[index]}-(640|1280)\\.webp$`).test(card.file)||!card.loaded||Math.abs(card.ratio-1672/941)>.03||card.overlaidTitle||!card.arrow||!card.label?.includes('Ver categoria'))))throw new Error('As quatro artes aprovadas não estão completas e ordenadas nos cards.');
+  if(featureViews.some(view=>view.cards.length!==4||view.cards.some((card,index)=>card.category!==approvedOrder[index]||!new RegExp(`^feature-v2-${approvedOrder[index]}-(640|1280)\\.webp$`).test(card.file)||!card.loaded||Math.abs(card.ratio-1)>.03||card.overlaidTitle||!card.arrow||!card.label?.includes('Ver categoria'))))throw new Error('As quatro artes aprovadas não estão completas e ordenadas nos cards.');
   if(badLocalResponses.length)throw new Error(`Recursos locais indisponíveis: ${[...new Set(badLocalResponses)].join(', ')}.`);
   const result = { records, productViews, featureViews, beverageViews, phase2Views, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
   await writeFile(join(output, 'results.json'), JSON.stringify(result, null, 2));

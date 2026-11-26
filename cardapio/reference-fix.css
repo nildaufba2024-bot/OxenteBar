@@ -237,10 +237,10 @@ body.menu-page::before{
 }
 
 /* As quatro artes aprovadas já incluem os títulos; nenhuma legenda é sobreposta. */
-.menu-page .feature-card--approved{aspect-ratio:1672/941;background:#271006}
-.menu-page .feature-card--approved img{object-fit:contain;object-position:center;width:100%;height:100%;padding:0}
+.menu-page .feature-card--approved{aspect-ratio:1;background:#271006}
+.menu-page .feature-card--approved img{object-fit:cover;object-position:center;width:100%;height:100%;padding:0}
 @media(max-width:700px){
-  .menu-page .feature-card--approved{aspect-ratio:1672/941}
+  .menu-page .feature-card--approved{aspect-ratio:1}
 }
 
 /* Artes finais das cervejas: cenário e gelo já fazem parte de cada foto. */
