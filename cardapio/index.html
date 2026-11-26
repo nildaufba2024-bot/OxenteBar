@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Delícias do Oxente: consulte o cardápio, as categorias e os preços do Oxente Bar e Petiscaria.">
+  <meta name="description" content="Consulte o cardápio, as categorias e os preços do Oxente Bar e Petiscaria.">
   <meta name="theme-color" content="#120904">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
-  <title>Delícias do Oxente — Oxente Bar e Petiscaria</title>
+  <title>Cardápio — Oxente Bar e Petiscaria</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Lobster&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
@@ -19,20 +19,19 @@
   <link rel="stylesheet" href="menu.css?v=visual-9">
   <link rel="stylesheet" href="../public-ui.css?v=app-nav-3">
   <link rel="stylesheet" href="premium.css?v=logo-cliente-1">
-  <link rel="stylesheet" href="reference-fix.css?v=2">
+  <link rel="stylesheet" href="reference-fix.css?v=4">
 </head>
 <body class="menu-page">
   <main class="menu-shell">
     <a class="menu-back" href="../">← VOLTAR AO INÍCIO</a>
     <header class="menu-header" aria-label="Apresentação do cardápio">
-      <img id="menuBrandLogo" class="menu-logo-large" src="../public/assets/oxente-logo-cliente.png" alt="Oxente Bar e Petiscaria" width="1350" height="1165" fetchpriority="high" decoding="async">
+      <div class="menu-logo-stage">
+        <span class="menu-logo-rope menu-logo-rope--left" aria-hidden="true"></span>
+        <span class="menu-logo-rope menu-logo-rope--right" aria-hidden="true"></span>
+        <img id="menuBrandLogo" class="menu-logo-large" src="../public/assets/oxente-logo-cliente.png" alt="Oxente Bar e Petiscaria" width="1350" height="1165" fetchpriority="high" decoding="async">
+      </div>
       <div class="menu-header-main">
-        <div class="menu-title-plaque">
-          <div class="menu-title-crest" aria-hidden="true"><svg viewBox="0 0 80 54" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 38h62M15 42h50M18 35c2-17 11-25 22-25s20 8 22 25H18ZM40 10V5m-5 0h10"/><path d="M28 20c4-4 8-6 12-6" opacity=".6"/></svg></div>
-          <svg class="menu-title-leaf menu-title-leaf--left" viewBox="0 0 28 58" fill="none" aria-hidden="true"><path d="M5 54C19 41 21 21 14 4" stroke="currentColor" stroke-width="2"/><path d="M12 13C5 12 3 8 5 3c6 1 9 4 7 10ZM17 25c-7-1-10-5-9-10 7 1 11 4 9 10ZM15 37c-7 0-10-3-10-8 7 0 11 2 10 8ZM12 47c-6 1-9-1-10-6 6-1 10 0 10 6ZM17 18c6-3 8-7 6-12-6 3-8 7-6 12ZM19 30c6-3 8-7 6-12-6 3-8 7-6 12Z" fill="currentColor"/></svg>
-          <h1><span>Delícias do</span><strong>OXENTE</strong></h1>
-          <svg class="menu-title-leaf menu-title-leaf--right" viewBox="0 0 28 58" fill="none" aria-hidden="true"><path d="M5 54C19 41 21 21 14 4" stroke="currentColor" stroke-width="2"/><path d="M12 13C5 12 3 8 5 3c6 1 9 4 7 10ZM17 25c-7-1-10-5-9-10 7 1 11 4 9 10ZM15 37c-7 0-10-3-10-8 7 0 11 2 10 8ZM12 47c-6 1-9-1-10-6 6-1 10 0 10 6ZM17 18c6-3 8-7 6-12-6 3-8 7-6 12ZM19 30c6-3 8-7 6-12-6 3-8 7-6 12Z" fill="currentColor"/></svg>
-        </div>
+        <h1 class="sr-only">Cardápio do Oxente Bar e Petiscaria</h1>
         <div class="search-row">
           <label class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input id="searchInput" type="search" placeholder="O que vamos pedir?" aria-label="Buscar no cardápio" autocomplete="off"><button type="button" id="clearSearch" aria-label="Limpar pesquisa" hidden>×</button></label>
           <p id="resultCount" class="result-count" aria-live="polite"></p>
@@ -60,7 +59,7 @@
   <script defer src="../data/hours.js"></script>
   <script defer src="../data/store.js"></script>
   <script defer src="../data/oxente-photos.js"></script>
-  <script defer src="../app.js?v=logo-cliente-1"></script>
+  <script defer src="../app.js?v=beer-photos-1"></script>
   <script defer src="../public-ui.js?v=app-nav-3"></script>
   <script>if('serviceWorker' in navigator){let refreshing=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(!refreshing){refreshing=true;location.reload()}})}</script>
 </body>

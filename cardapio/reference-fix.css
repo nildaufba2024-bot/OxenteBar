@@ -47,6 +47,10 @@ body.menu-page::before{
 .menu-page .beer-copy{top:auto;bottom:0;left:0;right:0;gap:2px;align-items:center;padding:8px 6px 7px;text-align:center}
 .menu-page .beer-copy strong{font-size:clamp(16px,1.9vw,25px);line-height:1.05}
 .menu-page .beer-copy>span{padding:3px 8px;border-radius:10px;font-size:clamp(11px,1.2vw,16px)}
+.menu-page .product-card--beer .product-image{background:#f8f7f3}
+.menu-page .product-card--beer .product-image img{object-fit:contain;object-position:center;padding:6px}
+.menu-page .product-dialog--beer .dialog-media{background:#f8f7f3}
+.menu-page .product-dialog--beer .dialog-main-photo{object-fit:contain;padding:14px}
 @media(max-width:700px){
   body.menu-page::before{background:linear-gradient(180deg,#14070305 0%,#1607021a 32%,#140500a8 100%),url('../public/assets/oxente-cardapio-background-v2.png') center top/100% auto no-repeat,url('../public/assets/oxente-home-wood-approved.webp') center/cover repeat-y}
   .menu-page .menu-shell{padding-inline:12px}
@@ -90,4 +94,25 @@ body.menu-page::before{
   .menu-page .menu-title-plaque h1 span{font-size:29px}
   .menu-page .menu-title-plaque h1 strong{font-size:44px}
   .menu-page .beer-copy strong{font-size:9px}
+}
+
+/* Topo aprovado: a marca oficial suspensa ocupa o lugar da antiga placa de título. */
+.menu-page .menu-header{display:flex;flex-direction:column;align-items:center;padding:22px 0 15px}
+.menu-page .menu-logo-stage{position:relative;isolation:isolate;width:min(42vw,560px);max-width:100%;margin:0 auto}
+.menu-page .menu-logo-large{position:relative;z-index:1;display:block;width:100%;height:auto;max-height:none;margin:0;transform:none;object-fit:contain}
+.menu-page .menu-logo-rope{position:absolute;z-index:0;top:-28px;width:13px;height:27%;border:1px solid #7d3b12;border-radius:7px;background:repeating-linear-gradient(145deg,#713108 0 3px,#eaaa54 4px 7px,#6f310f 8px 10px);box-shadow:inset 2px 0 2px #ffe09a,2px 2px 5px #000a;transform:rotate(8deg)}
+.menu-page .menu-logo-rope--left{left:21%}
+.menu-page .menu-logo-rope--right{right:21%;transform:rotate(-8deg)}
+.menu-page .menu-header-main{width:100%}
+.menu-page .menu-header .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.menu-page .search-row{width:min(100%,920px);margin:8px auto 0}
+.menu-page .search-box{width:100%}
+@media(max-width:700px){
+  .menu-page .menu-header{padding:9px 0 9px}
+  .menu-page .menu-logo-stage{width:min(80vw,460px)}
+  .menu-page .menu-logo-rope{top:-22px;width:9px;height:27%;border-radius:5px}
+  .menu-page .search-row{margin-top:2px}
+  .menu-page .search-box{height:44px}
+  .menu-page .category-rail{margin-top:3px}
+  .menu-page .feature-card strong{font-size:clamp(16px,4.8vw,21px)}
 }
