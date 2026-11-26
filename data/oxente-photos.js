@@ -106,8 +106,8 @@ window.OXENTE_PHOTOS = Object.freeze({
   'cervejas-107': {url:'../public/assets/products/beer-brahma-600ml-reference.webp',illustrative:true,source:'Foto de referência do catálogo acdn-us.mitiendanube.com'},
   'cervejas-108': {url:'../public/assets/products/beer-devassa-600ml-reference.webp',illustrative:true,source:'Imagem de referência de devassa.com.br'},
   'cervejas-109': {url:'../public/assets/products/beer-itaipava-600ml-reference.webp',illustrative:true,source:'Foto de referência do catálogo adfbebidas.com.br'},
-  'refrigerantes-110': {url:'../public/assets/products/refrigerante-generico-demo.webp',illustrative:true,source:'Imagem genérica de refrigerante para demonstração'},
-  'refrigerantes-111': {url:'../public/assets/products/refrigerante-generico-demo.webp',illustrative:true,source:'Imagem genérica de refrigerante para demonstração'},
+  'refrigerantes-110': {url:'../public/assets/products/refrigerante-ks-trio-ilustrativo.webp',illustrative:true,source:'Composição ilustrativa gerada para o Oxente: Coca-Cola, Sprite e Fanta KS'},
+  'refrigerantes-111': {url:'../public/assets/products/refrigerante-lata-trio-ilustrativo.webp',illustrative:true,source:'Composição ilustrativa gerada para o Oxente: Pepsi, Guaraná e Coca-Cola em lata'},
   'oxente-refeicoes-066': {url:'../public/assets/products/camarao-queijo-real.webp',illustrative:false,source:'Arquivo fornecido pelo estabelecimento'},
   'oxente-refeicoes-070': {url:'../public/assets/products/bobo-camarao-real.webp',illustrative:false,source:'Arquivo fornecido pelo estabelecimento'},
   'tabuas-ou-chapas-093': {url:'../public/assets/products/chapa-nordestina-real.webp',illustrative:false,source:'Arquivo fornecido pelo estabelecimento'}

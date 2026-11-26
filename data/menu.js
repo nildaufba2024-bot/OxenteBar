@@ -102,6 +102,11 @@
       });
     }
   }
+  // Preserva os IDs oficiais e altera somente a ordem de exibição das cervejas.
+  const beerOrder=['cervejas-101','cervejas-102','cervejas-103','cervejas-104','cervejas-105','cervejas-106','cervejas-107','cervejas-108','cervejas-109','cervejas-098','cervejas-099','cervejas-100'];
+  const beerStart=Math.min(...products.filter(p=>p.category==='cervejas').map(p=>p.order));
+  beerOrder.forEach((id,index)=>{const product=products.find(p=>p.id===id);if(product)product.order=beerStart+index});
+  products.find(p=>p.id==='refrigerantes-111').price=8;
   const a=products.find(p=>p.name==='Pastelzinho (A)');
   a.variations=['Carne','Frango','Queijos','Pizza'].map(name=>({name,price:a.price}));
   const b=products.find(p=>p.name==='Pastelzinho (B)');

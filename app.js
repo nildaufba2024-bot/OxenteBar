@@ -15,6 +15,7 @@
   const photo=p=>p.imageUrl==='photo:none'?{url:'',illustrative:false}:p.imageUrl?{url:T.imageUrl(p.imageUrl),illustrative:!!p.imageIllustrative}:{...(window.OXENTE_PHOTOS?.[p.id]||{}),url:window.OXENTE_PHOTOS?.[p.id]?.url||''};
   const spotlightAssets={
     'cervejas-098':'heineken-long-illustrative.webp',
+    'cervejas-101':'heineken-600-illustrative.webp',
     'cervejas-102':'stella-600-illustrative.webp',
     'cervejas-106':'amstel-600-illustrative.webp',
     'cervejas-107':'brahma-600-illustrative.webp'
@@ -47,7 +48,7 @@
     const imageSources=responsive(img,'34vw');
     const label=e(p.name);
     const description=e(p.shortDescription||p.description||'');
-    return '<article class="product-card '+(p.category==='cervejas'?'product-card--beer ':'')+(p.featured?'product-card--featured ':'')+(p.unavailable&&T.fresh?'is-unavailable ':'')+(!img?'product-card--no-image':'')+'">'+
+    return '<article class="product-card '+(p.category==='cervejas'?'product-card--beer ':'')+(p.category==='refrigerantes'?'product-card--soda ':'')+(p.featured?'product-card--featured ':'')+(p.unavailable&&T.fresh?'is-unavailable ':'')+(!img?'product-card--no-image':'')+'">'+
       '<button type="button" class="product-open" data-product="'+e(p.id)+'" aria-label="Ver detalhes de '+label+'">'+
       (img?'<div class="product-image"><img src="'+e(img)+'"'+imageSources+' alt="'+(image.illustrative?'Imagem ilustrativa':'Fotografia')+' de '+label+'" loading="lazy" decoding="async" width="640" height="480">'+(image.illustrative?'<span class="image-disclaimer">IMAGEM ILUSTRATIVA</span>':'')+'</div>':missingPhoto)+
       '<div class="product-info">'+(p.featured?'<span class="product-badge">DESTAQUE</span>':'')+
@@ -83,7 +84,7 @@
       return '<button type="button" class="feature-card" data-feature-category="'+e(c.id)+'" aria-label="Ver categoria '+e(c.label)+'"><img src="'+e(image.url)+'"'+responsive(image.url)+' alt="'+(image.illustrative?'Imagem ilustrativa':'Fotografia')+' da categoria '+e(c.label)+'" loading="lazy" decoding="async" width="640" height="480"><span class="feature-shade"></span><strong>'+e(c.label)+'</strong><span class="feature-go" aria-hidden="true">›</span>'+(image.illustrative?'<small>Imagem ilustrativa</small>':'')+'</button>';
     }).join('')+'</div>';
     const beers=state.products.filter(p=>p.active!==false&&p.category==='cervejas');
-    const beerNames=['heineken long','stella 600ml','amstel 600ml','brahma 600ml'];
+    const beerNames=['heineken 600ml','stella 600ml','amstel 600ml','brahma 600ml'];
     const highlighted=beerNames.map(name=>beers.find(p=>norm(p.name)===name)).filter(Boolean);
     for(const p of beers){if(highlighted.length>=4)break;if(!highlighted.includes(p))highlighted.push(p)}
     beerSpotlight.hidden=!landing||!highlighted.length||!!query;

@@ -63,6 +63,7 @@ try {
   const capture = new Set([320, 360, 390, 576, 768, 998, 1280, 1440, 1920]);
   const records = [];
   const productViews = [];
+  const beverageViews = [];
   for (const page of ['/', '/cardapio/']) {
     for (const width of widths) {
       await send('Emulation.setDeviceMetricsOverride', { width, height: width === 998 ? 1578 : width === 576 ? 889 : width === 360 ? 670 : width < 700 ? 780 : 900, deviceScaleFactor: 1, mobile: width < 700 });
@@ -86,6 +87,17 @@ try {
           productViews.push(await evaluate(`(() => {const cards=[...document.querySelectorAll('.product-card')],summary=document.querySelector('#categorySummary'),rail=document.querySelector('.category-rail');return {width:innerWidth,cards:cards.length,galleryHidden:document.querySelector('#featuredCategories').hidden,summaryText:summary?.querySelector('h2')?.textContent,summaryTop:Math.round(summary?.getBoundingClientRect().top||0),railBottom:Math.round(rail?.getBoundingClientRect().bottom||0),scrollY:Math.round(scrollY),overlappingText:cards.filter(card=>{const title=card.querySelector('h3')?.getBoundingClientRect(),price=card.querySelector('.price-pill')?.getBoundingClientRect();return title&&price&&title.bottom>price.top-2}).length,clippedPrices:cards.filter(card=>{const pill=card.querySelector('.price-pill');return pill&&pill.scrollWidth>pill.clientWidth+1}).length,clippedNames:cards.filter(card=>{const title=card.querySelector('h3');return title&&title.scrollWidth>title.clientWidth+1}).length}})()`));
           const products = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
           await writeFile(join(output, `produtos-${width}.png`), Buffer.from(products.data, 'base64'));
+          if ([320, 390].includes(width)) {
+            for (const category of ['cervejas', 'refrigerantes']) {
+              await evaluate(`document.querySelector('[data-category="${category}"]')?.click()`);
+              await delay(450);
+              await evaluate(`(async()=>{const images=[...document.querySelectorAll('.product-card img')];images.forEach(img=>img.loading='eager');await Promise.race([Promise.all(images.slice(0,4).map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,4500))]);return true})()`);
+              const view = await evaluate(`(() => ({category:document.querySelector('.category.is-active')?.dataset.category,names:[...document.querySelectorAll('.product-card h3')].map(x=>x.textContent),prices:[...document.querySelectorAll('.product-card .price-pill')].map(x=>x.textContent),images:[...document.querySelectorAll('.product-card img')].map(x=>({loaded:x.complete&&x.naturalWidth>0,file:x.currentSrc.split('/').pop()})),overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth}))()`);
+              beverageViews.push({width,...view});
+              const shot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
+              await writeFile(join(output, `produtos-${category}-${width}.png`), Buffer.from(shot.data, 'base64'));
+            }
+          }
         }
       }
     }
@@ -174,9 +186,14 @@ try {
     }
   }
   await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: standaloneScript });
-  const result = { records, productViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
+  for(const width of [320,390]){
+    const beerView=beverageViews.find(x=>x.width===width&&x.category==='cervejas'),sodaView=beverageViews.find(x=>x.width===width&&x.category==='refrigerantes');
+    if(!beerView||beerView.names[0]!=='Heineken 600ml'||beerView.names.slice(0,9).some(x=>!x.includes('600ml'))||beerView.names.slice(9).some(x=>!x.includes('Long'))||beerView.images.some(x=>!x.loaded)||beerView.overflow)throw new Error(`A ordem ou as imagens das cervejas falharam em ${width}px.`);
+    if(!sodaView||sodaView.names.length!==2||!sodaView.prices[1]?.includes('8,00')||sodaView.images.some(x=>!x.loaded)||sodaView.overflow)throw new Error(`Os refrigerantes falharam em ${width}px.`);
+  }
+  const result = { records, productViews, beverageViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
   await writeFile(join(output, 'results.json'), JSON.stringify(result, null, 2));
-  console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));
+  console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, beverageViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));
 } finally {
   ws?.close();
   browser.kill();

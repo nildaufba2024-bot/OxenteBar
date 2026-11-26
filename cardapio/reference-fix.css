@@ -51,6 +51,10 @@ body.menu-page::before{
 .menu-page .product-card--beer .product-image img{object-fit:contain;object-position:center;padding:6px}
 .menu-page .product-dialog--beer .dialog-media{background:#f8f7f3}
 .menu-page .product-dialog--beer .dialog-main-photo{object-fit:contain;padding:14px}
+.menu-page .product-card--soda .product-image{background:#211008}
+.menu-page .product-card--soda .product-image img{object-fit:contain}
+.menu-page .feature-card[data-feature-category="refrigerantes"]{background:#211008}
+.menu-page .feature-card[data-feature-category="refrigerantes"] img{object-fit:contain}
 @media(max-width:700px){
   body.menu-page::before{background:linear-gradient(180deg,#14070305 0%,#1607021a 32%,#140500a8 100%),url('../public/assets/oxente-cardapio-background-v2.png') center top/100% auto no-repeat,url('../public/assets/oxente-home-wood-approved.webp') center/cover repeat-y}
   .menu-page .menu-shell{padding-inline:12px}
