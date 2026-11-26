@@ -76,7 +76,7 @@
     const counts=new Map(cats.map(c=>[c.id,state.products.filter(p=>p.active!==false&&p.category===c.id).length]));
     catsEl.innerHTML=cats.map(c=>'<button type="button" class="category '+(active===c.id?'is-active':'')+'" data-category="'+e(c.id)+'" aria-pressed="'+(active===c.id)+'">'+icon(c.id)+'<span>'+e(c.label)+'</span><b>'+counts.get(c.id)+'</b></button>').join('')+
       '<button type="button" class="category '+(active==='todos'?'is-active':'')+'" data-category="todos" aria-pressed="'+(active==='todos')+'">'+icon('todos')+'<span>Todos</span><b>'+state.products.filter(p=>p.active!==false).length+'</b></button>';
-    const featuredOrder=['beliscar','pastelzinho','bolinhos','do-mar'];
+    const featuredOrder=['beliscar','pastelzinho','bolinhos','do-mar','oxente-refeicoes','tabuas-ou-chapas'];
     const featured=[...cats].sort((a,b)=>{
       const aa=featuredOrder.indexOf(a.id),bb=featuredOrder.indexOf(b.id);
       return (aa<0?100:aa)-(bb<0?100:bb)||a.order-b.order;

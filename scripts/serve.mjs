@@ -23,7 +23,7 @@ createServer(async(req,res)=>{
     if(!['GET','HEAD'].includes(req.method)){res.writeHead(405).end();return}
     let path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
     if(path==='/'||path==='/admin/'||path==='/cardapio/'||path==='/compartilhar/')path+='index.html';
-    if(!allowed.has(path)&&!/^\/public\/assets\/products\/[a-z0-9-]+\.webp$/.test(path)&&!/^\/public\/assets\/feature-(v2-)?(beliscar|pastelzinho|bolinhos|do-mar)-(640|1280)\.webp$/.test(path)&&!/^\/public\/assets\/beer-art-[a-z0-9-]+\.webp$/.test(path)&&!/^\/public\/icons\/[a-z0-9-]+\.png$/.test(path)){res.writeHead(404).end('Não encontrado');return}
+    if(!allowed.has(path)&&!/^\/public\/assets\/products\/[a-z0-9-]+\.webp$/.test(path)&&!/^\/public\/assets\/feature-(v2-)?(beliscar|pastelzinho|bolinhos|do-mar|oxente-refeicoes|tabuas-ou-chapas)-(640|1280)\.webp$/.test(path)&&!/^\/public\/assets\/beer-art-[a-z0-9-]+\.webp$/.test(path)&&!/^\/public\/icons\/[a-z0-9-]+\.png$/.test(path)){res.writeHead(404).end('Não encontrado');return}
     const target=resolve(root,'.'+path);
     if(target!==root&&!target.startsWith(root+sep)){res.writeHead(403).end();return}
     const info=await stat(target);

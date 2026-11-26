@@ -1,4 +1,4 @@
-const VERSION = 'oxente-visual-71';
+const VERSION = 'oxente-visual-72';
 const STATIC = `${VERSION}-static`;
 const IMAGES = `${VERSION}-images`;
 const SHELL = [
@@ -18,6 +18,8 @@ const SHELL = [
   '/public/assets/feature-v2-pastelzinho-640.webp', '/public/assets/feature-v2-pastelzinho-1280.webp',
   '/public/assets/feature-v2-bolinhos-640.webp', '/public/assets/feature-v2-bolinhos-1280.webp',
   '/public/assets/feature-v2-do-mar-640.webp', '/public/assets/feature-v2-do-mar-1280.webp',
+  '/public/assets/feature-v2-oxente-refeicoes-640.webp', '/public/assets/feature-v2-oxente-refeicoes-1280.webp',
+  '/public/assets/feature-v2-tabuas-ou-chapas-640.webp', '/public/assets/feature-v2-tabuas-ou-chapas-1280.webp',
   '/public/assets/beer-art-heineken-600ml.webp', '/public/assets/beer-art-stella-600ml.webp',
   '/public/assets/beer-art-amstel-600ml.webp', '/public/assets/beer-art-brahma-600ml.webp',
   '/public/assets/beer-art-budweiser-600ml.webp', '/public/assets/beer-art-spaten-600ml.webp',
