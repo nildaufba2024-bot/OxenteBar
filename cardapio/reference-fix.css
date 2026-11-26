@@ -274,3 +274,56 @@ body.menu-page::before{
   .menu-page .beer-catalog-card .beer-product-volume{font-size:clamp(10px,3vw,13px)}
   .menu-page .beer-catalog-card .price-pill{padding:5px 11px;font-size:clamp(13px,3.7vw,16px)}
 }
+
+/* Acabamento tipográfico dos cards de produtos; as fotos mantêm seu enquadramento. */
+.menu-page .product-card:not(.beer-catalog-card) .product-info{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:8px;
+  min-height:126px;
+  padding:15px 17px 16px;
+}
+.menu-page .product-card:not(.beer-catalog-card) .product-title{width:100%;min-width:0}
+.menu-page .product-card:not(.beer-catalog-card) .product-title h3{
+  font-size:clamp(19px,1.7vw,26px);
+  font-weight:800;
+  line-height:1.2;
+  letter-spacing:-.02em;
+  overflow-wrap:break-word;
+}
+.menu-page .product-card:not(.beer-catalog-card) .product-info>p{margin:0;font-size:13px;line-height:1.4}
+.menu-page .product-card:not(.beer-catalog-card) .product-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px 12px;
+  width:100%;
+  margin-top:auto;
+}
+.menu-page .product-card:not(.beer-catalog-card) .price-pill{
+  min-height:40px;
+  padding:9px 13px;
+  font-size:clamp(16px,1.4vw,20px);
+  font-weight:900;
+  line-height:1.1;
+}
+.menu-page .product-card:not(.beer-catalog-card) .details-cta{
+  min-height:40px;
+  margin-left:auto;
+  padding:9px 13px;
+  font-size:clamp(12px,1vw,14px);
+  font-weight:800;
+  line-height:1.1;
+}
+.menu-page .product-grid:not(.product-grid--beers){row-gap:20px}
+@media(max-width:700px){
+  .menu-page .product-card:not(.beer-catalog-card) .product-info{gap:7px;min-height:112px;padding:13px 14px 14px}
+  .menu-page .product-card:not(.beer-catalog-card) .product-title h3{font-size:clamp(20px,5.2vw,23px)}
+  .menu-page .product-card:not(.beer-catalog-card) .product-info>p{font-size:12px}
+  .menu-page .product-card:not(.beer-catalog-card) .product-bottom{gap:8px}
+  .menu-page .product-card:not(.beer-catalog-card) .price-pill{min-height:38px;padding:8px 12px;font-size:16px}
+  .menu-page .product-card:not(.beer-catalog-card) .details-cta{min-height:38px;padding:8px 11px;font-size:12px}
+  .menu-page .product-grid:not(.product-grid--beers){row-gap:18px}
+}
