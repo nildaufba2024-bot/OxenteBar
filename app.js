@@ -70,6 +70,10 @@
     features.hidden=!landing||!!query;
     features.classList.toggle('is-expanded',galleryExpanded);
     features.innerHTML='<div class="feature-heading"><div><span class="feature-spark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l18 18M21 3 3 21M5 2v6m3-6v6m3-6v6M2 9h10M18 2c-3 3-3 6-1 8l5-5"/></svg></span><h2>Explore o cardápio</h2></div><button type="button" class="feature-expand" aria-expanded="'+galleryExpanded+'">'+(galleryExpanded?'Mostrar menos':'Ver todas')+' <span aria-hidden="true">↗</span></button></div><div class="feature-grid">'+featured.map(c=>{
+      if(featuredOrder.includes(c.id)){
+        const artwork='../public/assets/feature-'+c.id;
+        return '<button type="button" class="feature-card feature-card--approved" data-feature-category="'+e(c.id)+'" aria-label="Ver categoria '+e(c.label)+'"><img src="'+artwork+'-1280.webp" srcset="'+artwork+'-640.webp 640w, '+artwork+'-1280.webp 1280w" sizes="(max-width:700px) 48vw, (max-width:1400px) 47vw, 650px" alt="Arte da categoria '+e(c.label)+'" loading="lazy" decoding="async" width="1672" height="941"><span class="feature-go" aria-hidden="true">›</span></button>';
+      }
       const direct=c.image?(c.image.startsWith('public/')?'../'+c.image:T.imageUrl(c.image)):'';
       const product=state.products.find(p=>p.active!==false&&p.category===c.id&&photo(p).url);
       const fallback=product?photo(product):{url:'../public/assets/oxente-menu-premium.webp',illustrative:true};

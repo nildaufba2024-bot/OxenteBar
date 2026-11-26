@@ -63,6 +63,7 @@ try {
   const capture = new Set([320, 360, 390, 430, 576, 768, 998, 1280, 1440, 1920]);
   const records = [];
   const productViews = [];
+  const featureViews = [];
   const beverageViews = [];
   const phase2Views = [];
   for (const page of ['/', '/cardapio/']) {
@@ -79,6 +80,10 @@ try {
       records.push(record);
       if (capture.has(width)) {
         await evaluate(`(async()=>{const images=[...document.querySelectorAll('img')];images.forEach(img=>img.loading='eager');await Promise.race([Promise.all(images.map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,6000))]);return true})()`);
+        if(page==='/cardapio/' && [320,390,768,1440].includes(width)){
+          const featureView=await evaluate(`(()=>[...document.querySelectorAll('.feature-card')].slice(0,4).map(card=>{const image=card.querySelector('img'),r=card.getBoundingClientRect();return {category:card.dataset.featureCategory,file:image.currentSrc.split('/').pop(),loaded:image.complete&&image.naturalWidth>0,ratio:r.width/r.height,overlaidTitle:!!card.querySelector('strong'),arrow:!!card.querySelector('.feature-go'),label:card.getAttribute('aria-label')}}))()`);
+          featureViews.push({width,cards:featureView});
+        }
         const screenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
         await writeFile(join(output, `${page === '/' ? 'inicio' : 'cardapio'}-${width}.png`), Buffer.from(screenshot.data, 'base64'));
         if(page==='/cardapio/' && [390,1440].includes(width)){
@@ -231,8 +236,10 @@ try {
   if(await evaluate(`document.body.innerText.includes('IMAGEM ILUSTRATIVA')`))throw new Error('O aviso de imagem ilustrativa ainda aparece no cardápio.');
   const toFrito=auditedImages.find(image=>image.id==='beliscar-002');
   if(toFrito?.file!=='oxente-logo-cliente.png')throw new Error('Tó Frito não usa a logomarca oficial.');
+  const approvedOrder=['beliscar','pastelzinho','bolinhos','do-mar'];
+  if(featureViews.some(view=>view.cards.length!==4||view.cards.some((card,index)=>card.category!==approvedOrder[index]||!new RegExp(`^feature-${approvedOrder[index]}-(640|1280)\\.webp$`).test(card.file)||!card.loaded||Math.abs(card.ratio-1672/941)>.03||card.overlaidTitle||!card.arrow||!card.label?.includes('Ver categoria'))))throw new Error('As quatro artes aprovadas não estão completas e ordenadas nos cards.');
   if(badLocalResponses.length)throw new Error(`Recursos locais indisponíveis: ${[...new Set(badLocalResponses)].join(', ')}.`);
-  const result = { records, productViews, beverageViews, phase2Views, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
+  const result = { records, productViews, featureViews, beverageViews, phase2Views, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
   await writeFile(join(output, 'results.json'), JSON.stringify(result, null, 2));
   console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, beverageViews, chronologicalLoaded:chronologicalImages.length, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));
 } finally {
