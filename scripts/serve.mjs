@@ -5,7 +5,7 @@ import { resolve, extname, sep } from 'node:path';
 const root=process.cwd(), port=Number(process.env.PORT||4174);
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.mp4':'video/mp4','.webmanifest':'application/manifest+json'};
 const allowed=new Set([
-'/index.html','/home.css','/home.js','/video.js','/cardapio/index.html','/cardapio/menu.css','/cardapio/premium.css','/cardapio/reference-fix.css','/styles.css','/app.js','/public-ui.js','/public-ui.css','/manifest.webmanifest','/sw.js','/offline.html',
+'/index.html','/home.css','/home.js','/video.js','/cardapio/index.html','/cardapio/menu.css','/cardapio/premium.css','/cardapio/reference-fix.css','/compartilhar/index.html','/styles.css','/app.js','/public-ui.js','/public-ui.css','/manifest.webmanifest','/sw.js','/offline.html',
 '/admin/index.html','/admin/manifest.webmanifest','/admin/admin.css','/admin/auth.css','/admin/hours-panel.css','/admin/admin-premium.css','/admin/admin.js','/admin/admin-safe.js','/admin/hours-panel.js','/admin/vendor/qrcode.js',
 '/data/menu.js','/data/store.js','/data/hours.js','/data/runtime-config.js','/data/oxente-photos.js','/public/vendor/supabase.js',
 '/public/assets/oxente-logo-oficial.jpg','/public/assets/oxente-hero.jpg','/public/assets/oxente-cardapio.jpg',
@@ -22,7 +22,7 @@ createServer(async(req,res)=>{
   try{
     if(!['GET','HEAD'].includes(req.method)){res.writeHead(405).end();return}
     let path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
-    if(path==='/'||path==='/admin/'||path==='/cardapio/')path+='index.html';
+    if(path==='/'||path==='/admin/'||path==='/cardapio/'||path==='/compartilhar/')path+='index.html';
     if(!allowed.has(path)&&!/^\/public\/assets\/products\/[a-z0-9-]+\.webp$/.test(path)&&!/^\/public\/assets\/feature-(v2-)?(beliscar|pastelzinho|bolinhos|do-mar)-(640|1280)\.webp$/.test(path)&&!/^\/public\/assets\/beer-art-[a-z0-9-]+\.webp$/.test(path)&&!/^\/public\/icons\/[a-z0-9-]+\.png$/.test(path)){res.writeHead(404).end('Não encontrado');return}
     const target=resolve(root,'.'+path);
     if(target!==root&&!target.startsWith(root+sep)){res.writeHead(403).end();return}
