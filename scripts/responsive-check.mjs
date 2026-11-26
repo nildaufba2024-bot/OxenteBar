@@ -64,6 +64,7 @@ try {
   const records = [];
   const productViews = [];
   const beverageViews = [];
+  const phase2Views = [];
   for (const page of ['/', '/cardapio/']) {
     for (const width of widths) {
       await send('Emulation.setDeviceMetricsOverride', { width, height: width === 998 ? 1578 : width === 576 ? 889 : width === 360 ? 670 : width < 700 ? 780 : 900, deviceScaleFactor: 1, mobile: width < 700 });
@@ -96,6 +97,19 @@ try {
               beverageViews.push({width,...view});
               const shot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
               await writeFile(join(output, `produtos-${category}-${width}.png`), Buffer.from(shot.data, 'base64'));
+            }
+            if ([320, 390].includes(width)) {
+              for (const category of ['beliscar', 'bolinhos', 'caldos', 'do-ar', 'da-terra', 'do-mar', 'oxente-refeicoes', 'pirao-de-aipim', 'tabuas-ou-chapas', 'sobremesa']) {
+                await evaluate(`document.querySelector('[data-category="${category}"]')?.click()`);
+                await delay(200);
+                await evaluate(`(async()=>{const images=[...document.querySelectorAll('.product-card img')];images.forEach(img=>img.loading='eager');await Promise.all(images.map(img=>img.decode().catch(()=>{})));return true})()`);
+                const view = await evaluate(`(() => ({category:document.querySelector('.category.is-active')?.dataset.category,images:[...document.querySelectorAll('.product-card')].map(card=>({id:card.querySelector('[data-product]')?.dataset.product,file:card.querySelector('img')?.currentSrc.split('/').pop(),loaded:!card.querySelector('img')||card.querySelector('img').naturalWidth>0})),overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth}))()`);
+                phase2Views.push(view);
+                if ((width === 390 && ['beliscar', 'oxente-refeicoes', 'pirao-de-aipim'].includes(category)) || (width === 320 && category === 'oxente-refeicoes')) {
+                  const shot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
+                  await writeFile(join(output, `fase2-${category}-${width}.png`), Buffer.from(shot.data, 'base64'));
+                }
+              }
             }
           }
         }
@@ -191,9 +205,11 @@ try {
     if(!beerView||beerView.names[0]!=='Heineken 600ml'||beerView.names.slice(0,9).some(x=>!x.includes('600ml'))||beerView.names.slice(9).some(x=>!x.includes('Long'))||beerView.images.some(x=>!x.loaded)||beerView.overflow)throw new Error(`A ordem ou as imagens das cervejas falharam em ${width}px.`);
     if(!sodaView||sodaView.names.length!==2||!sodaView.prices[1]?.includes('8,00')||sodaView.images.some(x=>!x.loaded)||sodaView.overflow)throw new Error(`Os refrigerantes falharam em ${width}px.`);
   }
-  const result = { records, productViews, beverageViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
+  const phase2Images=phase2Views.flatMap(view=>view.images.filter(image=>image.file?.startsWith('fase2-')));
+  if(phase2Images.length!==44||phase2Images.some(image=>!image.loaded)||phase2Views.some(view=>view.overflow))throw new Error('As 22 artes finais da fase 2 não carregaram corretamente em 320px e 390px.');
+  const result = { records, productViews, beverageViews, phase2Views, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
   await writeFile(join(output, 'results.json'), JSON.stringify(result, null, 2));
-  console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, beverageViews, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));
+  console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, beverageViews, phase2Loaded:phase2Images.length, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));
 } finally {
   ws?.close();
   browser.kill();

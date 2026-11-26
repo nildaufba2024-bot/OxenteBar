@@ -53,6 +53,7 @@ body.menu-page::before{
 .menu-page .product-dialog--beer .dialog-main-photo{object-fit:contain;padding:14px}
 .menu-page .product-card--soda .product-image{background:#211008}
 .menu-page .product-card--soda .product-image img{object-fit:contain}
+.menu-page .product-image img[src*="/fase2-"]{object-fit:contain;background:#210d05}
 .menu-page .feature-card[data-feature-category="refrigerantes"]{background:#211008}
 .menu-page .feature-card[data-feature-category="refrigerantes"] img{object-fit:contain}
 @media(max-width:700px){
