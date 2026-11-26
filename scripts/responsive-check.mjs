@@ -60,7 +60,7 @@ try {
   await send('Runtime.enable');
   await send('Network.enable');
   const widths = [320, 360, 375, 390, 393, 412, 414, 430, 480, 576, 600, 768, 998, 1024, 1280, 1440, 1920];
-  const capture = new Set([320, 360, 390, 576, 768, 998, 1280, 1440, 1920]);
+  const capture = new Set([320, 360, 390, 430, 576, 768, 998, 1280, 1440, 1920]);
   const records = [];
   const productViews = [];
   const beverageViews = [];
@@ -81,7 +81,7 @@ try {
         await evaluate(`(async()=>{const images=[...document.querySelectorAll('img')];images.forEach(img=>img.loading='eager');await Promise.race([Promise.all(images.map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,6000))]);return true})()`);
         const screenshot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
         await writeFile(join(output, `${page === '/' ? 'inicio' : 'cardapio'}-${width}.png`), Buffer.from(screenshot.data, 'base64'));
-        if (page === '/cardapio/' && [320, 390, 768, 1440].includes(width)) {
+        if (page === '/cardapio/' && [320, 360, 390, 430, 768, 1440].includes(width)) {
           await evaluate(`document.querySelector('[data-category="beliscar"]')?.click()`);
           await delay(900);
           await evaluate(`(async()=>{const images=[...document.querySelectorAll('.product-card img')];images.forEach(img=>img.loading='eager');await Promise.race([Promise.all(images.slice(0,6).map(img=>img.decode().catch(()=>{}))),new Promise(r=>setTimeout(r,4500))]);return true})()`);
@@ -98,16 +98,18 @@ try {
               const shot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
               await writeFile(join(output, `produtos-${category}-${width}.png`), Buffer.from(shot.data, 'base64'));
             }
-            if ([320, 390].includes(width)) {
-              for (const category of ['beliscar', 'bolinhos', 'caldos', 'do-ar', 'da-terra', 'do-mar', 'oxente-refeicoes', 'pirao-de-aipim', 'tabuas-ou-chapas', 'sobremesa']) {
+            if ([320, 360, 390, 430].includes(width)) {
+              const allCategories=['beliscar','pastelzinho','bolinhos','caldos','espetinhos','do-ar','da-terra','do-mar','oxente-refeicoes','pirao-de-aipim','oxente-kids','porcoes','sobremesa','tabuas-ou-chapas','cervejas','refrigerantes'];
+              const inspected=width===390?allCategories:['beliscar','bolinhos','caldos','do-mar','tabuas-ou-chapas'];
+              for (const category of inspected) {
                 await evaluate(`document.querySelector('[data-category="${category}"]')?.click()`);
                 await delay(200);
                 await evaluate(`(async()=>{const images=[...document.querySelectorAll('.product-card img')];images.forEach(img=>img.loading='eager');await Promise.all(images.map(img=>img.decode().catch(()=>{})));return true})()`);
                 const view = await evaluate(`(() => ({category:document.querySelector('.category.is-active')?.dataset.category,images:[...document.querySelectorAll('.product-card')].map(card=>({id:card.querySelector('[data-product]')?.dataset.product,file:card.querySelector('img')?.currentSrc.split('/').pop(),loaded:!card.querySelector('img')||card.querySelector('img').naturalWidth>0})),overflow:document.documentElement.scrollWidth>document.documentElement.clientWidth}))()`);
-                phase2Views.push(view);
-                if ((width === 390 && ['beliscar', 'oxente-refeicoes', 'pirao-de-aipim'].includes(category)) || (width === 320 && category === 'oxente-refeicoes')) {
+                phase2Views.push({width,...view});
+                if (width===390 || (width===320&&category==='beliscar') || (width===430&&category==='tabuas-ou-chapas')) {
                   const shot = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });
-                  await writeFile(join(output, `fase2-${category}-${width}.png`), Buffer.from(shot.data, 'base64'));
+                  await writeFile(join(output, `cronologica-${category}-${width}.png`), Buffer.from(shot.data, 'base64'));
                 }
               }
             }
@@ -205,11 +207,13 @@ try {
     if(!beerView||beerView.names[0]!=='Heineken 600ml'||beerView.names.slice(0,9).some(x=>!x.includes('600ml'))||beerView.names.slice(9).some(x=>!x.includes('Long'))||beerView.images.some(x=>!x.loaded)||beerView.overflow)throw new Error(`A ordem ou as imagens das cervejas falharam em ${width}px.`);
     if(!sodaView||sodaView.names.length!==2||!sodaView.prices[1]?.includes('8,00')||sodaView.images.some(x=>!x.loaded)||sodaView.overflow)throw new Error(`Os refrigerantes falharam em ${width}px.`);
   }
-  const phase2Images=phase2Views.flatMap(view=>view.images.filter(image=>image.file?.startsWith('fase2-')));
-  if(phase2Images.length!==44||phase2Images.some(image=>!image.loaded)||phase2Views.some(view=>view.overflow))throw new Error('As 22 artes finais da fase 2 não carregaram corretamente em 320px e 390px.');
+  const chronologicalImages=phase2Views.filter(view=>view.width===390).flatMap(view=>view.images.filter(image=>image.file?.startsWith('cronologica-')));
+  if(chronologicalImages.length!==34||chronologicalImages.some(image=>!image.loaded)||phase2Views.some(view=>view.overflow))throw new Error('As 34 artes cronológicas não carregaram corretamente no mobile.');
+  const toFrito=phase2Views.find(view=>view.width===390&&view.category==='beliscar')?.images.find(image=>image.id==='beliscar-002');
+  if(toFrito?.file)throw new Error('Tó Frito ainda exibe uma imagem não comprovada.');
   const result = { records, productViews, beverageViews, phase2Views, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors, failedLocalRequests, badLocalResponses } };
   await writeFile(join(output, 'results.json'), JSON.stringify(result, null, 2));
-  console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, beverageViews, phase2Loaded:phase2Images.length, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));
+  console.log(JSON.stringify({ total: records.length, overflow: records.filter(x => x.overflow), missing: records.filter(x => x.page === '/cardapio/' && !x.beerCards), productViews, beverageViews, chronologicalLoaded:chronologicalImages.length, home, admin, landscape, pwa, interaction, productDetails, offline, offlineReload, standalone, diagnostics: { pageErrors: pageErrors.length, failedLocalRequests: failedLocalRequests.length, badLocalResponses: [...new Set(badLocalResponses)] } }, null, 2));
 } finally {
   ws?.close();
   browser.kill();
