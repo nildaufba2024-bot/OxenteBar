@@ -66,7 +66,7 @@
       if (!enabled && !demo) return '';
       const classes = `action service service--${id}${enabled ? '' : ' is-unconfigured'}`;
       const icon = icons[id];
-      const image = id === 'video' ? '<span class="video-photo" role="img" aria-label="Imagem ilustrativa do ambiente do bar"></span>' : '';
+      const image = id === 'video' ? '<span class="video-photo" role="img" aria-label="Ambiente do bar"></span>' : '';
       const contents = `<span class="service-icon" aria-hidden="true">${icon}</span><span class="action-copy"><strong>${e(label)}</strong></span>${image}`;
       return enabled
         ? `<a class="${classes}" href="${e(url)}" target="_blank" rel="noopener noreferrer" aria-label="${e(label)}">${contents}</a>`
