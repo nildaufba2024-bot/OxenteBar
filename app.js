@@ -60,10 +60,9 @@
   function render(){
     const state=T.get(), identity=state.identity;
     T.applyTheme(state);
-    const logo=identity.logo==='public/assets/oxente-logo-premium.webp'?'../public/assets/oxente-logo-cliente.png':identity.logo?.startsWith('public/')?'../'+identity.logo:T.imageUrl(identity.logo);
-    document.querySelector('#menuBrandLogo').src=logo||'../public/assets/oxente-logo-cliente.png';
+    document.querySelector('#menuBrandLogo').src='../public/assets/oxente-logo-cardapio-cordas.png';
     document.body.classList.toggle('is-offline',!T.fresh);
-    document.title='Delícias do Oxente — '+identity.name;
+    document.title='Cardápio — '+identity.name;
     const cats=state.categories.filter(c=>c.active).sort((a,b)=>a.order-b.order);
     if(active!=='todos'&&!cats.some(c=>c.id===active))active=cats[0]?.id||'todos';
     const counts=new Map(cats.map(c=>[c.id,state.products.filter(p=>p.active!==false&&p.category===c.id).length]));
