@@ -45,8 +45,8 @@ const files = [
   'index.html', 'home.css', 'home.js', 'video.js', 'styles.css', 'app.js',
   'public-ui.css', 'public-ui.js', 'manifest.webmanifest', 'sw.js', 'offline.html',
   'cardapio/index.html', 'cardapio/menu.css', 'cardapio/premium.css', 'cardapio/reference-fix.css', 'compartilhar/index.html',
-  'admin/index.html', 'admin/manifest.webmanifest', 'admin/admin.css', 'admin/auth.css', 'admin/hours-panel.css', 'admin/admin-premium.css',
-  'admin/admin.js', 'admin/admin-safe.js', 'admin/hours-panel.js',
+  'admin/index.html', 'admin/admin.css', 'admin/auth.css', 'admin/hours-panel.css',
+  'admin/admin.js', 'admin/hours-panel.js',
   'data/menu.js', 'data/hours.js', 'data/store.js', 'data/oxente-photos.js'
 ];
 const directories = ['public/assets', 'public/icons', 'public/vendor', 'admin/vendor'];
