@@ -382,3 +382,43 @@ body.menu-page::before{
   .menu-page .category span{font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){.menu-page .category{transition:none}}
+
+/* Resposta tátil das seis artes aprovadas, sem animar ou recortar as fotografias. */
+.menu-page .feature-card--approved{
+  transition:transform .26s cubic-bezier(.2,.8,.2,1),border-color .26s ease,box-shadow .26s ease;
+}
+.menu-page .feature-card--approved .feature-go{
+  transition:transform .26s cubic-bezier(.2,.8,.2,1),box-shadow .26s ease;
+}
+.menu-page .feature-card--approved:hover{
+  transform:translateY(-5px) scale(1.012);
+  border-color:#ffe17a;
+  box-shadow:0 16px 30px #000c,0 0 0 2px #ffcf4a66,0 0 18px #ffc23866;
+}
+.menu-page .feature-card--approved:hover .feature-go{
+  transform:translateX(3px) scale(1.1);
+  box-shadow:0 0 12px #ffc238aa;
+}
+.menu-page .feature-card--approved.is-touch-preview,
+.menu-page .feature-card--approved:focus-visible{
+  transform:translateY(-4px) scale(1.01);
+  border-color:#ffe17a;
+  box-shadow:0 14px 27px #000c,0 0 0 2px #ffcf4a66,0 0 16px #ffc23866;
+}
+.menu-page .feature-card--approved.is-touch-preview .feature-go,
+.menu-page .feature-card--approved:focus-visible .feature-go{
+  transform:translateX(3px) scale(1.1);
+  box-shadow:0 0 12px #ffc238aa;
+}
+.menu-page .feature-card--approved:active{transform:translateY(-1px) scale(.985)}
+@media(prefers-reduced-motion:reduce){
+  .menu-page .feature-card--approved{transition:border-color .14s ease,box-shadow .14s ease}
+  .menu-page .feature-card--approved .feature-go{transition:box-shadow .14s ease}
+  .menu-page .feature-card--approved:hover,
+  .menu-page .feature-card--approved.is-touch-preview,
+  .menu-page .feature-card--approved:focus-visible,
+  .menu-page .feature-card--approved:active{transform:none}
+  .menu-page .feature-card--approved:hover .feature-go,
+  .menu-page .feature-card--approved.is-touch-preview .feature-go,
+  .menu-page .feature-card--approved:focus-visible .feature-go{transform:none}
+}

@@ -170,7 +170,32 @@
     document.querySelector('.category-summary').scrollIntoView({behavior,block:'start'});
   }
   catsEl.addEventListener('click',event=>{const b=event.target.closest('[data-category]');if(b)selectCategory(b.dataset.category)});
-  features.addEventListener('click',event=>{const card=event.target.closest('[data-feature-category]');if(card){selectCategory(card.dataset.featureCategory);return}if(event.target.closest('.feature-expand')){galleryExpanded=!galleryExpanded;render()}});
+  let touchedFeatureCard=null,featureTouchClearTimer;
+  const clearFeatureTouch=()=>{touchedFeatureCard?.classList.remove('is-touch-preview');touchedFeatureCard=null};
+  const previewFeatureAt=touch=>{
+    const card=document.elementFromPoint(touch.clientX,touch.clientY)?.closest('.feature-card--approved');
+    const next=card&&features.contains(card)?card:null;
+    if(next===touchedFeatureCard)return;
+    clearFeatureTouch();
+    touchedFeatureCard=next;
+    touchedFeatureCard?.classList.add('is-touch-preview');
+  };
+  features.addEventListener('touchstart',event=>{clearTimeout(featureTouchClearTimer);if(event.touches[0])previewFeatureAt(event.touches[0])},{passive:true});
+  features.addEventListener('touchmove',event=>{if(event.touches[0])previewFeatureAt(event.touches[0])},{passive:true});
+  features.addEventListener('touchend',()=>{featureTouchClearTimer=setTimeout(clearFeatureTouch,230)},{passive:true});
+  features.addEventListener('touchcancel',clearFeatureTouch,{passive:true});
+  features.addEventListener('click',event=>{
+    const card=event.target.closest('[data-feature-category]');
+    if(card){
+      const category=card.dataset.featureCategory;
+      if(card===touchedFeatureCard){
+        const feedbackTime=matchMedia('(prefers-reduced-motion: reduce)').matches?140:180;
+        setTimeout(()=>{clearTimeout(featureTouchClearTimer);clearFeatureTouch();selectCategory(category)},feedbackTime);
+      }else selectCategory(category);
+      return;
+    }
+    if(event.target.closest('.feature-expand')){galleryExpanded=!galleryExpanded;render()}
+  });
   beerSpotlight.addEventListener('click',event=>{if(event.target.closest('.beer-all')){selectCategory('cervejas');return}const card=event.target.closest('[data-beer-product]');if(card)open(card.dataset.beerProduct)});
   input.addEventListener('input',event=>{query=event.target.value.trim();if(query){active='todos';landing=false}render()});
   clearSearch.addEventListener('click',()=>{query='';input.value='';landing=true;active='beliscar';render();input.focus()});
