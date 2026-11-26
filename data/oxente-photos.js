@@ -106,7 +106,7 @@ window.OXENTE_PHOTOS = Object.freeze({
   'cervejas-107': {url:'../public/assets/products/beer-brahma-600ml-wood.webp',illustrative:true,source:'Foto de referência do catálogo acdn-us.mitiendanube.com; garrafa preservada sobre fundo amadeirado Oxente'},
   'cervejas-108': {url:'../public/assets/products/beer-devassa-600ml-wood.webp',illustrative:true,source:'Imagem de referência de devassa.com.br; garrafa preservada sobre fundo amadeirado Oxente'},
   'cervejas-109': {url:'../public/assets/products/beer-itaipava-600ml-wood.webp',illustrative:true,source:'Foto de referência do catálogo adfbebidas.com.br; garrafa preservada sobre fundo amadeirado Oxente'},
-  'refrigerantes-110': {url:'../public/assets/oxente-logo-cliente.png',illustrative:false,source:'Logomarca oficial Oxente; fotografia específica não aprovada'},
+  'refrigerantes-110': {url:'../public/assets/products/refrigerante-ks-trio-aprovado.webp',illustrative:false,source:'Arte aprovada pelo cliente: Coca-Cola, Sprite e Fanta KS 290ml'},
   'refrigerantes-111': {url:'../public/assets/products/refrigerante-lata-trio-ilustrativo.webp',illustrative:true,source:'Composição ilustrativa gerada para o Oxente: Pepsi, Guaraná e Coca-Cola em lata'},
   'oxente-refeicoes-066': {url:'../public/assets/products/cronologica-05-oxente-refeicoes-066.webp',illustrative:true,source:'Arte editada do ZIP cronologico, linha 05: imagens/05-camarao-com-queijo-coalho-na-chapa.webp'},
   'oxente-refeicoes-070': {url:'../public/assets/products/cronologica-42-oxente-refeicoes-070.webp',illustrative:true,source:'Arte editada do ZIP cronologico, linha 42: imagens/42-bobo-de-camarao.webp'},

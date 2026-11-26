@@ -53,6 +53,7 @@ body.menu-page::before{
 .menu-page .product-dialog--beer .dialog-main-photo{object-fit:contain;padding:14px}
 .menu-page .product-card--soda .product-image{background:#211008}
 .menu-page .product-card--soda .product-image img{object-fit:contain}
+.menu-page .product-card--soda .product-image img[src*="refrigerante-ks-trio-aprovado"]{object-fit:cover;object-position:center}
 .menu-page .product-image img[src*="/cronologica-"]{object-fit:contain;background:#210d05}
 .menu-page .product-image img[src$="/oxente-logo-cliente.png"],
 .menu-page .feature-card img[src$="/oxente-logo-cliente.png"],
